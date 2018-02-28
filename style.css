@@ -3,32 +3,59 @@ body {
 }
 
 .board {
+  display: inline-block;
   border: 1px solid red;
-  width: 300px;
-  display: flex;
-  flex-direction: column;
+  width: 350px;
+  margin: 0 auto;
 }
 div .row {
-  display: block;
+  /*display: inline-block;*/
   border: 1px solid blue;
-  margin: 10px auto;
-  padding: 10px;
+  margin: 0 auto;
+  padding: 5px;
+  text-align: center;
 }
 div .box {
   border: 1px solid orange;
-  height: 40px;
-  width: 40px;
+  height: 20px;
+  width: 20px;
   display: inline-block;
-  margin: 4px;
+  margin: 5px;
 }
 
 .pegBucket {
-
+  display: inline-block;
+  margin: 0 auto;
+  padding: 10px;
+  border: 1px solid red;
+  width: 25%;
+  text-align: center;
 }
 
 .bucketPeg {
   display: inline-block;
-  width: 20px;
-  height: 20px
+  width: 40px;
+  height: 40px;
   border: 1px solid black;
+  margin: 4px;
+}
+
+.blue{
+  background-color: blue;
+}
+
+.yellow{
+  background-color: yellow;
+}
+
+.green{
+  background-color: green;
+}
+
+.orange{
+  background-color: orange;
+}
+
+.selectedPeg {
+  background-color: white;
 }

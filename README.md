@@ -21,26 +21,58 @@ You are **responsible** for scheduling time with your squad to seek approval for
 
 Use this section to describe your final project and perhaps any links to relevant sites that help convey the concept and\or functionality
 
+The game is Mastermind. The player's job is to guess the secret code chosen by the computer using a series of guesses. The code is four "pegs" chosen from six color options, for example [blue],[red],[yellow],[orange]. Every time the user makes a guess, the computer gives two responses: the number of pegs that match a color in the secret code, and the number of pegs that match the color and location of the peg in the secret code. The response does not tell the user what specific pegs are correct, only that the guess included correct choices.
+
+The user uses deductive logic to guess the secret code within 10 turns, or loses.
+
 ## Priority Matrix
 
 Include a full list of features that have been prioritized based on the `Time and Importance` Matix.
 
+|  Feature |  Time |  Importance |
+|---|---|---|
+|  |  |
+|  |  |
+|  |  |
+|  |  |
+
 ## MVP
 
-Include the full list of features that will be part of your MVP
+*Include the full list of features that will be part of your MVP*
+
+* Basic gameplay
+    * Game board is generated
+    * Instructions shown to user
+    * User can input guess onto board
+    * If guess is correct, user wins
+    * If incorrect, computer gives feedback on user's guess
+    * After 10 incorrect guesses, user loses and secret code is shown
 
 ## POST MVP
 
-Include the full list of features that you are considering for POST MVP
+*Include the full list of features that you are considering for POST MVP*
+
+* Verison 1.1
+    * Fleshed out tutorial
+    * Splash screen with instructions, tool tips to highlight next moves
+* Version 1.2
+    * Scoring: fewer/faster guesses to win = higher score
+* Version 1.3
+    * Drag and Drop pins onto board to make guesses
+* Version 2
+    * Difficulty levels
+* Version 2.1
+    * Stressful senarios, like the background slowly filling up with water and getting higher with every incorrect guess
 
 ## Wireframes
 
-Include images of your wireframes. 
+*Include images of your wireframes.*
 
 ## Game Components
 
 ### Landing Page
-What will a player see when they start your game?
+*What will a player see when they start your game?*
+A welcome screen 
 
 ### Game Initialization
 What will a player see when the game is started? 
