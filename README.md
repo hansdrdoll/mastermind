@@ -67,7 +67,8 @@ Include a full list of features that have been prioritized based on the `Time an
 
 ## Wireframes
 
-[[https://git.generalassemb.ly/hans/mastermind/blob/master/mastermind_wireframe.png|alt:mastermind-wireframe]]
+![Mastermind Wireframe](https://git.generalassemb.ly/raw/hans/mastermind/master/mastermind_wireframe.png)
+>>>>>>> 1c9c60279c01b5929812778bd913c5e2cb558a6d
 
 ## Game Components
 
