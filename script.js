@@ -10,11 +10,13 @@ const boardRows = 9
 const boardCells = 3
 
 class Pegs {
-  constructor (id,x,y,color = null) {
+  constructor (id,x,y,color = null, match = 0) {
     this.color = color;
     this.id = id
     this.x = x
     this.y = y
+    // match 0 = no match, 1 = color match, 2 = color and location match
+    this.match = match
   }
 }
 
@@ -96,13 +98,11 @@ const MasterCode = function () {
     let choices = colors.length
     let counter = boardCells + 1;
 // debugger;
-    // While there are elements in the array
+    // While there are elements in the array, pick a random index
     while (counter > 0) {
-        // Pick a random index
         let index = Math.floor(Math.random() * choices);
-        // Decrease counter by 1
         counter--;
-        // And swap the last element with it
+        // swap the last element with it
         let temp = colors[choices];
         colors[choices] = colors[index];
         masterCodeValues.push(colors[index])
@@ -117,12 +117,38 @@ console.log("the master code is",masterCodeValues)
 
 const checkGuess = function () {
 
+let score = 0
+let feedbackMatrix = []
+
   for (let i = 0; i < masterCodeValues.length; i++) {
+    // compare every guess index only to matching master index
     if (currentPegRow[i].color === masterCodeValues[i]) {
-    console.log(currentPegRow[i].color,"matches",masterCodeValues[i])
+      console.log(currentPegRow[i].color,"matches",masterCodeValues[i])
+      currentPegRow[i].match = 2
+      score += 2
+      feedbackMatrix.push(2)
     } else {
-    console.log(currentPegRow[i].color,"does not match",masterCodeValues[i])
+      // compare every guess index to every master index
+      for (let x = 0; x < masterCodeValues.length; x++) {
+        //
+        if (currentPegRow[i].color === masterCodeValues[x]) {
+          console.log(currentPegRow[i].color,"matches a color at",x)
+          currentPegRow[i].match = 1
+          feedbackMatrix.push(1)
+        } else {
+          // console.log(currentPegRow[i].color,"no match at ",x)
+        }
+      }
+      // console.log(currentPegRow[i].color,"does not match",masterCodeValues[i])
     }
+  }
+  // check for win state
+
+
+console.log("feedback:",feedbackMatrix)
+console.log(typeof score,score)
+  if (score === 8) {
+    console.log("You win")
   }
 }
 
@@ -132,6 +158,7 @@ const checkGuess = function () {
 // 3. user presses make guess button
 // 4. function evaulates row array against master
 
+    // match 0 = no match, 1 = color match, 2 = color and location match
 
 // function that creates the master code
 
