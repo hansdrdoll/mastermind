@@ -36,7 +36,7 @@ div .box {
   display: inline-block;
   width: 40px;
   height: 40px;
-  border: 1px solid black;
+  border: 1px solid white;
   margin: 4px;
 }
 
@@ -56,6 +56,14 @@ div .box {
   background-color: orange;
 }
 
+.pink{
+  background-color: pink;
+}
+
+.black{
+  background-color: black;
+}
+
 .selectedPeg {
-  background-color: white;
+  border:1px solid black;
 }
