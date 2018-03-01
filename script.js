@@ -54,6 +54,7 @@ const Row5 = document.querySelector('.js-row5')
 let currentRow = Row9
 
 
+
 // create the peg bucket
 for (let i = 0; i < colors.length; i++) {
   let BucketPeg = document.createElement('div')
@@ -109,11 +110,20 @@ const MasterCode = function () {
 }
 MasterCode()
 
+let currentPegRow = pegBoard[9]
 
 
-console.log(masterCodeValues)
+console.log("the master code is",masterCodeValues)
+
 const checkGuess = function () {
 
+  for (let i = 0; i < masterCodeValues.length; i++) {
+    if (currentPegRow[i].color === masterCodeValues[i]) {
+    console.log(currentPegRow[i].color,"matches",masterCodeValues[i])
+    } else {
+    console.log(currentPegRow[i].color,"does not match",masterCodeValues[i])
+    }
+  }
 }
 
 // 1. user selects peg color, color is held in variable selectedPegColor
