@@ -11,7 +11,7 @@ const boardCells = 3
 
 class Pegs {
   constructor (id,x,y,color = null, match = 0) {
-    this.color = color;
+    this.color = color
     this.id = id
     this.x = x
     this.y = y
@@ -19,6 +19,14 @@ class Pegs {
     this.match = match
   }
 }
+
+class MasterCode {
+  constructor(color){
+    this.color = color
+    this.match = false
+  }
+}
+
 
 // create the board
 function createBoard () {
@@ -55,8 +63,6 @@ const Row6 = document.querySelector('.js-row6')
 const Row5 = document.querySelector('.js-row5')
 let currentRow = Row9
 
-
-
 // create the peg bucket
 for (let i = 0; i < colors.length; i++) {
   let BucketPeg = document.createElement('div')
@@ -70,7 +76,7 @@ for (let i = 0; i < colors.length; i++) {
 pegBucket.addEventListener('click', function(evt) {
   selectedPegColor = evt.target.id
   evt.target.classList.add('selectedPeg')
-  console.log(selectedPegColor)
+  // console.log(selectedPegColor)
 })
 
 // make the current row alive
@@ -89,67 +95,74 @@ const assignPegToObject = function () {
   let y = targetPegObj[1]
   let selectedPegObj = pegBoard[x][y]
   selectedPegObj.color = selectedPegColor
-  console.log(selectedPegObj)
 }
 
 // shuffle the colors array into master code array
 // https://stackoverflow.com/a/6274398
-const MasterCode = function () {
-    let choices = colors.length
-    let counter = boardCells + 1;
-// debugger;
-    // While there are elements in the array, pick a random index
-    while (counter > 0) {
-        let index = Math.floor(Math.random() * choices);
-        counter--;
+
+const MasterCodeCreator = function () {
+  // debugger;
+  let choices = colors.length
+  let counter = boardCells + 1
+  for (i = 0; i < counter; i++) {
+        while (counter > 0) {
+        let index = Math.floor(Math.random() * choices)
+        counter--
         // swap the last element with it
-        let temp = colors[choices];
-        colors[choices] = colors[index];
-        masterCodeValues.push(colors[index])
+        colors[choices] = colors[index]
+        let masterCode = new MasterCode (colors[index])
+        masterCodeValues.push(masterCode)
     }
+  }
 }
-MasterCode()
+
+MasterCodeCreator()
 
 let currentPegRow = pegBoard[9]
-
 
 console.log("the master code is",masterCodeValues)
 
 const checkGuess = function () {
 
-let score = 0
-let feedbackMatrix = []
+  let feedbackMatrix = []
 
   for (let i = 0; i < masterCodeValues.length; i++) {
     // compare every guess index only to matching master index
-    if (currentPegRow[i].color === masterCodeValues[i]) {
-      console.log(currentPegRow[i].color,"matches",masterCodeValues[i])
+    if (currentPegRow[i].color === masterCodeValues[i].color) {
+      console.log(currentPegRow[i].color,"matches",masterCodeValues[i].color)
       currentPegRow[i].match = 2
-      score += 2
-      feedbackMatrix.push(2)
+      masterCodeValues[i].match = true
     } else {
       // compare every guess index to every master index
       for (let x = 0; x < masterCodeValues.length; x++) {
         //
-        if (currentPegRow[i].color === masterCodeValues[x]) {
-          console.log(currentPegRow[i].color,"matches a color at",x)
+        if (masterCodeValues[x].match === false
+          && currentPegRow[i].color === masterCodeValues[x].color) {
+          console.log(currentPegRow[i].color,i,"matches a color at",x)
           currentPegRow[i].match = 1
-          feedbackMatrix.push(1)
-        } else {
-          // console.log(currentPegRow[i].color,"no match at ",x)
+          masterCodeValues[x].match = true
         }
       }
-      // console.log(currentPegRow[i].color,"does not match",masterCodeValues[i])
     }
   }
-  // check for win state
 
-
-console.log("feedback:",feedbackMatrix)
-console.log(typeof score,score)
-  if (score === 8) {
-    console.log("You win")
+  // get all the match values into an array
+  for (let i = 0; i < currentPegRow.length; i++) {
+    feedbackMatrix.push(currentPegRow[i].match)
   }
+
+  console.log("feedback:",feedbackMatrix)
+
+  let score = feedbackMatrix.reduce((a,b) => a + b)
+
+  if (score === 8) {
+    console.log("you win")
+    } else {
+    console.log(score)
+    }
+
+    // now increment the turn value
+
 }
 
 // 1. user selects peg color, color is held in variable selectedPegColor
