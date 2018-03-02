@@ -78,3 +78,9 @@ div .box {
   height: 20px;
   display: inline-block;
 }
+
+.feedbackWrapper {
+  border:1px solid blue;
+  width: 100px;
+  height: 100%;
+}

@@ -5,6 +5,7 @@ const paintCan = document.querySelector(".js-paintCan");
 const colors = ["blue", "yellow", "green", "orange", "pink", "black"];
 let pegBoard = [];
 let masterCodeValues = [];
+let feedbackMatrix = [];
 
 // this can become user toggleable for difficulty level
 const boardRows = 9;
@@ -16,12 +17,9 @@ let currentTurn = boardRows;
 let currentColor;
 
 class Pegs {
-  constructor(id, x, y, color, match = 0) {
+  constructor(id, color, match = 0) {
     this.color = color;
     this.id = id;
-    // i don't think I need x and y values anymore since i'm just using id
-    // this.x = x;
-    // this.y = y;
     // match 0 = no match, 1 = color match, 2 = color and location match
     this.match = match;
   }
@@ -82,7 +80,6 @@ function createPaintCan() {
     // and make them active
 
     paintCan.addEventListener("click", function(evt) {
-      console.log(evt.target.id);
       currentColor = evt.target.id;
       // assign the color clicked to the active paint color var
       // getPaintColor(evt.target.id)
@@ -96,21 +93,18 @@ function highlightPaintCan(color) {
   paintCan.classList.add(color);
 }
 
+// make this work
 function rinseOffPaintBrushes() {
   paintCan.classList.remove("activePaintColor");
 }
 
 function assignPaintColor(event) {
-  console.log(currentColor);
   let id = event.target.id;
   pegBoard[id[0]][id[1]].color = currentColor;
   event.target.classList.add(currentColor);
 }
 
 function assignPegRowEventListeners(turn) {
-  // for loop that assings event listeners that call
-  // tried to take this function outside to fix the matching error on removeeventlistener
-  // add event listeners to pegs
   for (i = 0; i < pegBoard[0].length; i++) {
     let pegDiv = document.getElementById(pegBoard[turn][i].id);
     pegDiv.addEventListener("click", assignPaintColor);
@@ -125,17 +119,6 @@ function removePegRowEventListeners(turn) {
     pegDiv.removeEventListener("click", assignPaintColor);
   }
 }
-
-// make function that takes the current div returns the object
-// const assignPegToObject = function () {
-//   let x = targetPegObj[0]
-//   let y = targetPegObj[1]
-//   let selectedPegObj = pegBoard[x][y]
-//   selectedPegObj.color = currentColor
-// }
-
-// shuffle the colors array into master code array
-// https://stackoverflow.com/a/6274398
 
 function createMasterCodes() {
   // debugger;
@@ -165,70 +148,66 @@ function appendMasterCodesDiv () {
   document.body.appendChild(masterCodeDiv)
 }
 
-// let currentPegRow = pegBoard[9]
+function setMasterCodesFalse () {
+    for (let i = 0; i < masterCodeValues.length; i++) {
+    masterCodeValues[i].match = false;
+  }
+}
 
-console.log("the master code is", masterCodeValues);
+function makeFeedbackDiv () {
+  let feedbackWrapper = document.createElement('div')
+  feedbackWrapper.classList.add('feedbackWrapper')
+  // for (i = 0; i <)
+}
+
+function makeFeedbackArray (turn) {
+  for (let i = 0; i < pegBoard[turn].length; i++) {
+    feedbackMatrix.push(pegBoard[turn][i].match);
+    }
+    console.log("feedback:", feedbackMatrix);
+}
+
+function checkScore () {
+  let score = feedbackMatrix.reduce((a, b) => a + b);
+  if (score === 8) {
+    console.log("you win");
+  } else {
+    feedbackMatrix = []
+    nextTurn();
+  }
+}
+
+
 
 function checkGuess(turn) {
-  let feedbackMatrix = [];
 
+  // for each item check for full matches
   for (let i = 0; i < masterCodeValues.length; i++) {
-    // compare every guess index only to matching master index
-    // console.log(pegBoard[turn][i]);
     if (pegBoard[turn][i].color === masterCodeValues[i].color) {
-      console.log(
-        `${pegBoard[turn][i].color} matches ${
-          masterCodeValues[i].color
-        } in location ${i}`
-      );
+      console.log("full match")
       pegBoard[turn][i].match = 2;
       masterCodeValues[i].match = true;
-    } else {
-      // compare every guess index to every master index
+    }
+  }
+  for (let i = 0; i < masterCodeValues.length; i++) {
+    if (pegBoard[turn][i].match === 0) {
       for (let x = 0; x < masterCodeValues.length; x++) {
-        //
-        if (
-          masterCodeValues[x].match === false &&
-          pegBoard[turn][i].color === masterCodeValues[x].color
-        ) {
-          console.log(pegBoard[turn][i].color, i, "matches a color at", x);
+        if (pegBoard[turn][i].color === masterCodeValues[x].color
+          && masterCodeValues[x].match === false) {
           pegBoard[turn][i].match = 1;
           masterCodeValues[x].match = true;
         }
       }
     }
   }
-
-  // get all the match values into an array
-  function makeFeedbackArray () {
-  for (let i = 0; i < pegBoard[turn].length; i++) {
-    feedbackMatrix.push(pegBoard[turn][i].match);
-  }
-  console.log("feedback:", feedbackMatrix);
-  }
-
-  function checkScore () {
-    let score = feedbackMatrix.reduce((a, b) => a + b);
-    if (score === 8) {
-      console.log("you win");
-    } else {
-      console.log(score);
-      nextTurn();
-    }
-  }
-
-  makeFeedbackArray()
+  makeFeedbackArray(currentTurn)
   checkScore()
 }
+  // get all the match values into an array
 
 function nextTurn() {
-  // assigns event listeners to currentTurn pegBoard array index
   currentTurn--;
-  // turn off event listeners
-  // set all master tags to false
-  for (let i = 0; i < masterCodeValues.length; i++) {
-    masterCodeValues[i].match = false;
-  }
+  setMasterCodesFalse()
   // delete the old guess button until i figure out how to fix it
   let guessButton = document.querySelector(".guessButton");
   guessButton.parentNode.removeChild(guessButton);
@@ -247,16 +226,7 @@ function init() {
   createMasterCodes();
   appendMasterCodesDiv();
   createGuessButton(currentTurn);
+  // console.log("the master code is", masterCodeValues);
 }
 
 init();
-// 1. user selects peg color, color is held in variable currentColor
-// 2. user places color into peg hole, color is transferred to
-//    the div as a class and the object as a value
-// 3. user presses make guess button
-// 4. function evaulates row array against master
-
-// match 0 = no match, 1 = color match, 2 = color and location match
-
-// To Do
-// 1) display master code for testing
