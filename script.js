@@ -14,19 +14,14 @@ const boardCells = 3;
 let currentTurn = boardRows;
 
 let currentColor;
-// let targetPegObj = 00
-// let selectedPegObj
-
-// let Row9, Row8, Row7, Row6, Row5, Row4, Row3, Row2, Row1, Row0;
-// const rows = [Row9, Row8, Row7, Row6, Row5, Row4, Row3, Row2, Row1, Row0];
 
 class Pegs {
   constructor(id, x, y, color, match = 0) {
     this.color = color;
     this.id = id;
     // i don't think I need x and y values anymore since i'm just using id
-    this.x = x;
-    this.y = y;
+    // this.x = x;
+    // this.y = y;
     // match 0 = no match, 1 = color match, 2 = color and location match
     this.match = match;
   }
@@ -56,7 +51,7 @@ function createBoardAndPegBoardObj() {
       newDiv.id = "" + x + y;
       row.appendChild(newDiv);
       // push the new object to the row array
-      let newPeg = new Pegs("" + x + y, x, y);
+      let newPeg = new Pegs("" + x + y);
       rowArr.push(newPeg);
     }
     // push the row array to the pegBoard
@@ -87,8 +82,8 @@ function createPaintCan() {
     // and make them active
 
     paintCan.addEventListener("click", function(evt) {
-      console.log(evt.target.id)
-      currentColor = evt.target.id
+      console.log(evt.target.id);
+      currentColor = evt.target.id;
       // assign the color clicked to the active paint color var
       // getPaintColor(evt.target.id)
       // highlight which paint is selected
@@ -97,37 +92,37 @@ function createPaintCan() {
   }
 }
 
-function highlightPaintCan (color) {
-  paintCan.classList.add(color)
+function highlightPaintCan(color) {
+  paintCan.classList.add(color);
 }
 
-function rinseOffPaintBrushes (){
-  paintCan.classList.remove("activePaintColor")
+function rinseOffPaintBrushes() {
+  paintCan.classList.remove("activePaintColor");
+}
+
+function assignPaintColor(event) {
+  console.log(currentColor);
+  let id = event.target.id;
+  pegBoard[id[0]][id[1]].color = currentColor;
+  event.target.classList.add(currentColor);
 }
 
 function assignPegRowEventListeners(turn) {
   // for loop that assings event listeners that call
   // tried to take this function outside to fix the matching error on removeeventlistener
-  function assignPaintColor (event) {
-    console.log(event)
-    console.log(currentColor)
-    let id = event.target.id
-    pegBoard[id[0]][id[1]].color = currentColor;
-    event.target.classList.add(currentColor);
-  };
-    // remove the event listeners from previous
-    if (turn + 1 < pegBoard.length) {
-    let oldTurn = turn + 1;
-    console.log("turning off previous listeners from", oldTurn);
-    for (i = 0; i < pegBoard[0].length; i++) {
-      let pegDiv = document.getElementById(pegBoard[oldTurn][i].id);
-      // console.log(pegDiv);
-      pegDiv.removeEventListener("click",assignPaintColor)};
-  }
   // add event listeners to pegs
   for (i = 0; i < pegBoard[0].length; i++) {
     let pegDiv = document.getElementById(pegBoard[turn][i].id);
     pegDiv.addEventListener("click", assignPaintColor);
+  }
+}
+
+function removePegRowEventListeners(turn) {
+  let oldTurn = turn + 1;
+  console.log("turning off previous listeners from", oldTurn);
+  for (i = 0; i < pegBoard[0].length; i++) {
+    let pegDiv = document.getElementById(pegBoard[oldTurn][i].id);
+    pegDiv.removeEventListener("click", assignPaintColor);
   }
 }
 
@@ -158,6 +153,18 @@ function createMasterCodes() {
   }
 }
 
+function appendMasterCodesDiv () {
+  let masterCodeDiv = document.createElement('div')
+  masterCodeDiv.classList.add("masterCodeDiv")
+  for (i = 0; i < masterCodeValues.length; i++) {
+    let eachMasterCode = document.createElement('div')
+    eachMasterCode.classList.add('masterCode')
+    eachMasterCode.classList.add(masterCodeValues[i].color)
+    masterCodeDiv.appendChild(eachMasterCode)
+  }
+  document.body.appendChild(masterCodeDiv)
+}
+
 // let currentPegRow = pegBoard[9]
 
 console.log("the master code is", masterCodeValues);
@@ -167,7 +174,7 @@ function checkGuess(turn) {
 
   for (let i = 0; i < masterCodeValues.length; i++) {
     // compare every guess index only to matching master index
-    console.log(pegBoard[turn][i]);
+    // console.log(pegBoard[turn][i]);
     if (pegBoard[turn][i].color === masterCodeValues[i].color) {
       console.log(
         `${pegBoard[turn][i].color} matches ${
@@ -193,33 +200,26 @@ function checkGuess(turn) {
   }
 
   // get all the match values into an array
+  function makeFeedbackArray () {
   for (let i = 0; i < pegBoard[turn].length; i++) {
     feedbackMatrix.push(pegBoard[turn][i].match);
   }
-
   console.log("feedback:", feedbackMatrix);
-
-  let score = feedbackMatrix.reduce((a, b) => a + b);
-
-  if (score === 8) {
-    console.log("you win");
-  } else {
-    console.log(score);
-    nextTurn();
   }
+
+  function checkScore () {
+    let score = feedbackMatrix.reduce((a, b) => a + b);
+    if (score === 8) {
+      console.log("you win");
+    } else {
+      console.log(score);
+      nextTurn();
+    }
+  }
+
+  makeFeedbackArray()
+  checkScore()
 }
-
-// function assignRowEventHandlers () {
-//   let totalCells = pegBoard.length * (boardCells + 1)
-//   console.log(totalCells)
-//   for (i = 0; i < totalCells; i++) {
-//     console.log(pegBoard[i])
-
-// for (i = 0; i > -1; i--) {
-// rows[i] = document.querySelector(`.js-row${i}`)
-// loop through your ids in the pegboard array instead
-// }
-// }
 
 function nextTurn() {
   // assigns event listeners to currentTurn pegBoard array index
@@ -235,6 +235,7 @@ function nextTurn() {
   // make a new guess button
   createGuessButton(currentTurn);
   // reassign the event listeners
+  removePegRowEventListeners(currentTurn);
   assignPegRowEventListeners(currentTurn);
 }
 
@@ -244,6 +245,7 @@ function init() {
   currentTurn = 9;
   assignPegRowEventListeners(currentTurn);
   createMasterCodes();
+  appendMasterCodesDiv();
   createGuessButton(currentTurn);
 }
 

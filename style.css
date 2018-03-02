@@ -67,3 +67,14 @@ div .box {
 .activePaintColor {
   border:1px solid black;
 }
+
+.masterCodeDiv {
+  display: inline-block;
+}
+
+.masterCode {
+  border:1px solid red;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+}
