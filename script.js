@@ -2,7 +2,7 @@ const body = document.querySelector("body");
 const board = document.querySelector(".js-board");
 const paintCan = document.querySelector(".js-paintCan");
 
-const colors = ["blue", "yellow", "green", "orange", "pink", "black"];
+const colors = ["blue", "purple", "green", "orange", "grey", "red"];
 let pegBoard = [];
 let masterCodeValues = [];
 let feedbackMatrix = [];
@@ -45,7 +45,7 @@ function createBoardAndPegBoardObj() {
     for (let y = 0; y <= boardCells; y++) {
       // create the html elements
       let newDiv = document.createElement("div");
-      newDiv.classList.add("box");
+      newDiv.classList.add("white");
       newDiv.id = "" + x + y;
       row.appendChild(newDiv);
       // push the new object to the row array
@@ -55,6 +55,7 @@ function createBoardAndPegBoardObj() {
     // push the row array to the pegBoard
     pegBoard.push(rowArr);
   }
+  document.querySelectorAll(`.row`)[currentTurn].classList.add('activeRow')
 }
 
 function createGuessButton() {
@@ -62,11 +63,11 @@ function createGuessButton() {
   guessButton.classList.add("guessButton");
   guessButton.textContent = "Check your guess";
   guessButton.addEventListener("click", runCheckGuessButton);
-  body.appendChild(guessButton);
+  paintCan.appendChild(guessButton);
 }
 
-function runCheckGuessButton () {
-  checkGuess(currentTurn)
+function runCheckGuessButton() {
+  checkGuess(currentTurn);
 }
 
 function createPaintCan() {
@@ -129,84 +130,83 @@ function createMasterCodes() {
   }
 }
 
-function appendMasterCodesDiv () {
-  let masterCodeDiv = document.createElement('div')
-  masterCodeDiv.classList.add("masterCodeDiv")
+function appendMasterCodesDiv() {
+  let masterCodeDiv = document.createElement("div");
+  masterCodeDiv.classList.add("masterCodeDiv");
   for (i = 0; i < masterCodeValues.length; i++) {
-    let eachMasterCode = document.createElement('div')
-    eachMasterCode.classList.add('masterCode')
-    eachMasterCode.classList.add(masterCodeValues[i].color)
-    masterCodeDiv.appendChild(eachMasterCode)
+    let eachMasterCode = document.createElement("div");
+    eachMasterCode.classList.add("masterCode");
+    eachMasterCode.classList.add(masterCodeValues[i].color);
+    masterCodeDiv.appendChild(eachMasterCode);
   }
-  document.body.appendChild(masterCodeDiv)
+  document.body.appendChild(masterCodeDiv);
 }
 
-function setMasterCodesFalse () {
-    for (let i = 0; i < masterCodeValues.length; i++) {
+function setMasterCodesFalse() {
+  for (let i = 0; i < masterCodeValues.length; i++) {
     masterCodeValues[i].match = false;
   }
 }
 
-function createFeedbackDiv () {
+function createFeedbackDiv() {
   // get the div
-  let feedbackWrapper = document.querySelector('.feedbackWrapper')
+  let feedbackWrapper = document.querySelector(".feedbackWrapper");
   // create the row in the div
   for (i = 0; i <= boardRows; i++) {
-    let feedbackRow = document.createElement('div');
+    let feedbackRow = document.createElement("div");
     feedbackRow.classList.add("feedbackRow", i);
     // create the four boxes
-      for (x = 0; x <= boardCells; x++) {
-        let feedbackPeg = document.createElement('div')
-        feedbackPeg.classList.add('feedbackPeg')
-        feedbackPeg.id = "f" + i + x;
-        feedbackRow.appendChild(feedbackPeg);
-      }
+    for (x = 0; x <= boardCells; x++) {
+      let feedbackPeg = document.createElement("div");
+      feedbackPeg.classList.add("feedbackPeg");
+      feedbackPeg.id = "f" + i + x;
+      feedbackRow.appendChild(feedbackPeg);
+    }
     feedbackWrapper.appendChild(feedbackRow);
   }
 }
 
 // add the shuffle function here?
-function makeFeedbackArray (turn) {
+function makeFeedbackArray(turn) {
   for (let i = 0; i < pegBoard[turn].length; i++) {
     feedbackMatrix.push(pegBoard[turn][i].match);
-    }
-    console.log("feedback:", feedbackMatrix);
+  }
+  console.log("feedback:", feedbackMatrix);
 }
 
-function checkScore () {
+function checkScore() {
   let score = feedbackMatrix.reduce((a, b) => a + b);
   if (score === 8) {
     console.log("you win");
+    appendMasterCodesDiv();
   } else {
-    printFeedback()
-    feedbackMatrix = []
+    printFeedback();
+    feedbackMatrix = [];
     nextTurn();
   }
 }
 
-function printFeedback () {
+function printFeedback() {
   // get dom elements for current turn ('f' + x + i)
   // 'f' prepends the element id, x = current turn, i = element index
   for (i = 0; i <= boardCells; i++) {
-    let feedbackPeg = document.getElementById(`f${currentTurn}${i}`)
-    console.log(feedbackPeg)
-    console.log(`print ${feedbackMatrix[i]}`)
+    let feedbackPeg = document.getElementById(`f${currentTurn}${i}`);
+    console.log(feedbackPeg);
+    console.log(`print ${feedbackMatrix[i]}`);
     switch (feedbackMatrix[i]) {
       case 0:
-        feedbackPeg.classList.add('noMatch')
-        break
-        case 1:
-        feedbackPeg.classList.add('halfMatch')
-        break
-        case 2:
-        feedbackPeg.classList.add('fullMatch')
+        feedbackPeg.classList.add("noMatch");
+        break;
+      case 1:
+        feedbackPeg.classList.add("feedbackPegHalf");
+        break;
+      case 2:
+        feedbackPeg.classList.add("feedbackPegFull");
     }
-    console.log(feedbackPeg)
   }
 }
 
 function checkGuess(turn) {
-
   // for each item check for full matches
   for (let i = 0; i < masterCodeValues.length; i++) {
     if (pegBoard[turn][i].color === masterCodeValues[i].color) {
@@ -218,34 +218,38 @@ function checkGuess(turn) {
   for (let i = 0; i < masterCodeValues.length; i++) {
     if (pegBoard[turn][i].match === 0) {
       for (let x = 0; x < masterCodeValues.length; x++) {
-        if (pegBoard[turn][i].color === masterCodeValues[x].color
-          && masterCodeValues[x].match === false) {
+        if (
+          pegBoard[turn][i].color === masterCodeValues[x].color &&
+          masterCodeValues[x].match === false
+        ) {
           pegBoard[turn][i].match = 1;
           masterCodeValues[x].match = true;
         }
       }
     }
   }
-  makeFeedbackArray(currentTurn)
-  checkScore()
+  makeFeedbackArray(currentTurn);
+  checkScore();
 }
-  // get all the match values into an array
+// get all the match values into an array
 
 // in class form creation
-let form = document.querySelector('.form')
-let nameImput = document.querySelector('.name')
-form.addEventListener('submit', function(evt) {
-  evt.preventDefault()
-  console.log(nameImput.value)
-})
+let form = document.querySelector(".form");
+let nameImput = document.querySelector(".name");
+form.addEventListener("submit", function(evt) {
+  evt.preventDefault();
+  console.log(nameImput.value);
+});
 
 
 function nextTurn() {
+  document.querySelectorAll(`.row`)[currentTurn].classList.remove('activeRow')
   currentTurn--;
-  setMasterCodesFalse()
+  setMasterCodesFalse();
   // reassign the event listeners
   removePegRowEventListeners(currentTurn);
   assignPegRowEventListeners(currentTurn);
+  document.querySelectorAll(`.row`)[currentTurn].classList.add('activeRow')
 }
 
 function init() {
@@ -255,7 +259,6 @@ function init() {
   currentTurn = boardRows;
   assignPegRowEventListeners(currentTurn);
   createMasterCodes();
-  appendMasterCodesDiv();
   createGuessButton();
   // console.log("the master code is", masterCodeValues);
 }
