@@ -17,8 +17,8 @@ let currentColor;
 // let targetPegObj = 00
 // let selectedPegObj
 
-let Row9, Row8, Row7, Row6, Row5, Row4, Row3, Row2, Row1, Row0;
-const rows = [Row9, Row8, Row7, Row6, Row5, Row4, Row3, Row2, Row1, Row0];
+// let Row9, Row8, Row7, Row6, Row5, Row4, Row3, Row2, Row1, Row0;
+// const rows = [Row9, Row8, Row7, Row6, Row5, Row4, Row3, Row2, Row1, Row0];
 
 class Pegs {
   constructor(id, x, y, color, match = 0) {
@@ -68,7 +68,7 @@ function createGuessButton(turn) {
   let guessButton = document.createElement("button");
 
   guessButton.classList.add("guessButton");
-  guessButton.value = "Check your guess";
+  guessButton.value = "Guess";
   guessButton.textContent = "Check your guess";
   guessButton.addEventListener("click", function() {
     checkGuess(turn);
@@ -85,55 +85,49 @@ function createPaintCan() {
     paintBrush.id = colors[i];
     paintCan.appendChild(paintBrush);
     // and make them active
+
     paintCan.addEventListener("click", function(evt) {
+      console.log(evt.target.id)
+      currentColor = evt.target.id
       // assign the color clicked to the active paint color var
-      currentColor = evt.target.id;
+      // getPaintColor(evt.target.id)
       // highlight which paint is selected
       evt.target.classList.add("activePaintColor");
     });
   }
 }
 
-// function assignPegBucketEventListeners () {
-//   // make the bucketPegs alive
-//   // when the user clicks a bucketPeg, transfer that value to the div and object
+function highlightPaintCan (color) {
+  paintCan.classList.add(color)
+}
 
-//     // make the current row alive
-//   .addEventListener('click', function(evt) {
-//     // change the div style
-//     evt.target.classList.add(currentColor);
-//     // give the object value
-//     targetPegObj = evt.target.id
-//     assignPegToObject()
-//   })
-// }
-
-function sendPaintColor(id) {
-  // send the held paint color
-  pegBoard[id[0]][id[1]].color = currentColor;
+function rinseOffPaintBrushes (){
+  paintCan.classList.remove("activePaintColor")
 }
 
 function assignPegRowEventListeners(turn) {
   // for loop that assings event listeners that call
   // tried to take this function outside to fix the matching error on removeeventlistener
-  let makePegsListen = function() {
-    sendPaintColor(this.id);
-    this.classList.add(currentColor);
+  function assignPaintColor (event) {
+    console.log(event)
+    console.log(currentColor)
+    let id = event.target.id
+    pegBoard[id[0]][id[1]].color = currentColor;
+    event.target.classList.add(currentColor);
   };
-
-  for (i = 0; i < pegBoard[0].length; i++) {
-    let pegDiv = document.getElementById(pegBoard[turn][i].id);
-    pegDiv.addEventListener("click", makePegsListen);
-  }
-  // remove the event listeners from previous
-  if (turn + 1 < pegBoard.length) {
+    // remove the event listeners from previous
+    if (turn + 1 < pegBoard.length) {
     let oldTurn = turn + 1;
     console.log("turning off previous listeners from", oldTurn);
     for (i = 0; i < pegBoard[0].length; i++) {
       let pegDiv = document.getElementById(pegBoard[oldTurn][i].id);
-      console.log(pegDiv);
-      pegDiv.removeEventListener("click", makePegsListen);
-    }
+      // console.log(pegDiv);
+      pegDiv.removeEventListener("click",assignPaintColor)};
+  }
+  // add event listeners to pegs
+  for (i = 0; i < pegBoard[0].length; i++) {
+    let pegDiv = document.getElementById(pegBoard[turn][i].id);
+    pegDiv.addEventListener("click", assignPaintColor);
   }
 }
 
@@ -213,11 +207,6 @@ function checkGuess(turn) {
     console.log(score);
     nextTurn();
   }
-
-  // if fewer than 4 pegs, prompt user to complete, return
-  // if the guess is incorrect, alert saying so
-  // deincrement current row
-  // if guess is correct, end game
 }
 
 // function assignRowEventHandlers () {
@@ -246,7 +235,6 @@ function nextTurn() {
   // make a new guess button
   createGuessButton(currentTurn);
   // reassign the event listeners
-
   assignPegRowEventListeners(currentTurn);
 }
 
