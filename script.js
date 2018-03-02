@@ -57,33 +57,26 @@ function createBoardAndPegBoardObj() {
   }
 }
 
-function createGuessButton(turn) {
+function createGuessButton() {
   let guessButton = document.createElement("button");
-
   guessButton.classList.add("guessButton");
-  guessButton.value = "Guess";
   guessButton.textContent = "Check your guess";
-  guessButton.addEventListener("click", function() {
-    checkGuess(turn);
-  });
+  guessButton.addEventListener("click", runCheckGuessButton);
   body.appendChild(guessButton);
 }
 
-// formerly knows as the peg bucket
+function runCheckGuessButton () {
+  checkGuess(currentTurn)
+}
+
 function createPaintCan() {
   for (let i = 0; i < colors.length; i++) {
-    // print paintCan to the DOM
     let paintBrush = document.createElement("div");
     paintBrush.classList.add("paintBrush", colors[i]);
     paintBrush.id = colors[i];
     paintCan.appendChild(paintBrush);
-    // and make them active
-
     paintCan.addEventListener("click", function(evt) {
       currentColor = evt.target.id;
-      // assign the color clicked to the active paint color var
-      // getPaintColor(evt.target.id)
-      // highlight which paint is selected
       evt.target.classList.add("activePaintColor");
     });
   }
@@ -154,12 +147,25 @@ function setMasterCodesFalse () {
   }
 }
 
-function makeFeedbackDiv () {
-  let feedbackWrapper = document.createElement('div')
-  feedbackWrapper.classList.add('feedbackWrapper')
-  // for (i = 0; i <)
+function createFeedbackDiv () {
+  // get the div
+  let feedbackWrapper = document.querySelector('.feedbackWrapper')
+  // create the row in the div
+  for (i = 0; i <= boardRows; i++) {
+    let feedbackRow = document.createElement('div');
+    feedbackRow.classList.add("feedbackRow", i);
+    // create the four boxes
+      for (x = 0; x <= boardCells; x++) {
+        let feedbackPeg = document.createElement('div')
+        feedbackPeg.classList.add('feedbackPeg')
+        feedbackPeg.id = "f" + i + x;
+        feedbackRow.appendChild(feedbackPeg);
+      }
+    feedbackWrapper.appendChild(feedbackRow);
+  }
 }
 
+// add the shuffle function here?
 function makeFeedbackArray (turn) {
   for (let i = 0; i < pegBoard[turn].length; i++) {
     feedbackMatrix.push(pegBoard[turn][i].match);
@@ -172,19 +178,39 @@ function checkScore () {
   if (score === 8) {
     console.log("you win");
   } else {
+    printFeedback()
     feedbackMatrix = []
     nextTurn();
   }
 }
 
-
+function printFeedback () {
+  // get dom elements for current turn ('f' + x + i)
+  // 'f' prepends the element id, x = current turn, i = element index
+  for (i = 0; i <= boardCells; i++) {
+    let feedbackPeg = document.getElementById(`f${currentTurn}${i}`)
+    console.log(feedbackPeg)
+    console.log(`print ${feedbackMatrix[i]}`)
+    switch (feedbackMatrix[i]) {
+      case 0:
+        feedbackPeg.classList.add('noMatch')
+        break
+        case 1:
+        feedbackPeg.classList.add('halfMatch')
+        break
+        case 2:
+        feedbackPeg.classList.add('fullMatch')
+    }
+    console.log(feedbackPeg)
+  }
+}
 
 function checkGuess(turn) {
 
   // for each item check for full matches
   for (let i = 0; i < masterCodeValues.length; i++) {
     if (pegBoard[turn][i].color === masterCodeValues[i].color) {
-      console.log("full match")
+      // console.log("full match")
       pegBoard[turn][i].match = 2;
       masterCodeValues[i].match = true;
     }
@@ -205,14 +231,18 @@ function checkGuess(turn) {
 }
   // get all the match values into an array
 
+// in class form creation
+let form = document.querySelector('.form')
+let nameImput = document.querySelector('.name')
+form.addEventListener('submit', function(evt) {
+  evt.preventDefault()
+  console.log(nameImput.value)
+})
+
+
 function nextTurn() {
   currentTurn--;
   setMasterCodesFalse()
-  // delete the old guess button until i figure out how to fix it
-  let guessButton = document.querySelector(".guessButton");
-  guessButton.parentNode.removeChild(guessButton);
-  // make a new guess button
-  createGuessButton(currentTurn);
   // reassign the event listeners
   removePegRowEventListeners(currentTurn);
   assignPegRowEventListeners(currentTurn);
@@ -221,11 +251,12 @@ function nextTurn() {
 function init() {
   createBoardAndPegBoardObj();
   createPaintCan();
-  currentTurn = 9;
+  createFeedbackDiv();
+  currentTurn = boardRows;
   assignPegRowEventListeners(currentTurn);
   createMasterCodes();
   appendMasterCodesDiv();
-  createGuessButton(currentTurn);
+  createGuessButton();
   // console.log("the master code is", masterCodeValues);
 }
 
