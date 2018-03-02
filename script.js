@@ -23,9 +23,10 @@ const rows = [Row9, Row8, Row7, Row6, Row5, Row4, Row3, Row2, Row1, Row0]
 
 
 class Pegs {
-  constructor (id,x,y,color = null, match = 0) {
+  constructor (id,x,y,color, match = 0) {
     this.color = color
     this.id = id
+    // i don't think I need x and y values anymore since i'm just using id
     this.x = x
     this.y = y
     // match 0 = no match, 1 = color match, 2 = color and location match
@@ -66,7 +67,9 @@ function createBoardAndPegBoardObj () {
 }
 
 function createGuessButton (turn) {
+
   let guessButton = document.createElement('button')
+
   guessButton.classList.add('guessButton')
   guessButton.value = 'Check your guess'
   guessButton.textContent = 'Check your guess'
@@ -115,12 +118,25 @@ function sendPaintColor (id) {
 
 function assignPegRowEventListeners (turn) {
   // for loop that assings event listeners that call
-  for (i = 0; i < pegBoard[0].length; i++) {
-    let pegDiv = document.getElementById(pegBoard[turn][i].id)
-    pegDiv.addEventListener('click', function(){
+// tried to take this function outside to fix the matching error on removeeventlistener
+      let makePegsListen = function() {
       sendPaintColor(this.id)
       this.classList.add(currentColor)
-    })
+    }
+
+  for (i = 0; i < pegBoard[0].length; i++) {
+    let pegDiv = document.getElementById(pegBoard[turn][i].id)
+    pegDiv.addEventListener('click', makePegsListen)
+  }
+  // remove the event listeners from previous
+  if ((turn + 1) < pegBoard.length) {
+    let oldTurn = turn + 1
+    console.log("turning off previous listeners from",oldTurn)
+    for (i = 0; i < pegBoard[0].length; i++) {
+      let pegDiv = document.getElementById(pegBoard[oldTurn][i].id)
+      console.log(pegDiv)
+      pegDiv.removeEventListener('click', makePegsListen)
+    }
   }
 }
 
@@ -217,8 +233,18 @@ function checkGuess (turn) {
 function nextTurn () {
   // assigns event listeners to currentTurn pegBoard array index
   currentTurn --
-  // turns off event listeners
+  // turn off event listeners
+  // set all master tags to false
+  for (let i = 0; i < masterCodeValues.length; i++) {
+    masterCodeValues[i].match = false
+  }
+  // delete the old guess button until i figure out how to fix it
+  let guessButton = document.querySelector('.guessButton')
+  guessButton.parentNode.removeChild(guessButton)
+  // make a new guess button
   createGuessButton(currentTurn)
+  // reassign the event listeners
+
   assignPegRowEventListeners(currentTurn)
 }
 
