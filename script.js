@@ -1,13 +1,26 @@
 const body = document.querySelector('body')
 const board = document.querySelector('.js-board')
-const pegBucket = document.querySelector('.js-pegBucket')
+const paintCan = document.querySelector('.js-paintCan')
 
 const colors = ['blue', 'yellow', 'green', 'orange', 'pink', 'black']
 let pegBoard = []
 let masterCodeValues = []
 
+// this can become user toggleable for difficulty level
 const boardRows = 9
 const boardCells = 3
+
+// this value equals the number of rows until deincremented by nextTurn
+let currentTurn = boardRows
+
+let currentColor
+// let targetPegObj = 00
+// let selectedPegObj
+
+
+let Row9, Row8, Row7, Row6, Row5, Row4, Row3, Row2, Row1, Row0;
+const rows = [Row9, Row8, Row7, Row6, Row5, Row4, Row3, Row2, Row1, Row0]
+
 
 class Pegs {
   constructor (id,x,y,color = null, match = 0) {
@@ -27,80 +40,102 @@ class MasterCode {
   }
 }
 
-
 // create the board
-function createBoard () {
-for (var x = 0; x <= boardRows; x++) {
-  // create the html row
-  let row = document.createElement('div')
-  row.classList.add('row', 'js-row' + x)
-  board.appendChild(row)
-  // make an array for this row
-  let rowArr = []
+function createBoardAndPegBoardObj () {
+  for (let x = 0; x <= boardRows; x++) {
+    // create the html row
+    let row = document.createElement('div')
+    row.classList.add('row', 'js-row' + x)
+    board.appendChild(row)
+    // make an array for this row
+    let rowArr = []
 
-  for (let y = 0; y <= boardCells; y++) {
-    // create the html elements
-    let newDiv = document.createElement('div')
-    newDiv.classList.add('box')
-    newDiv.id = '' + x + y
-    row.appendChild(newDiv)
-    // push the new object to the above array
-    let newPeg = new Pegs (('' + x + y), x, y)
-    rowArr.push(newPeg)
+    for (let y = 0; y <= boardCells; y++) {
+      // create the html elements
+      let newDiv = document.createElement('div')
+      newDiv.classList.add('box')
+      newDiv.id = '' + x + y
+      row.appendChild(newDiv)
+      // push the new object to the row array
+      let newPeg = new Pegs (('' + x + y), x, y)
+      rowArr.push(newPeg)
+    }
+    // push the row array to the pegBoard
+    pegBoard.push(rowArr)
   }
-  pegBoard.push(rowArr)
-}}
-
-createBoard()
-
-let selectedPegColor
-let targetPegObj = 00
-let selectedPegObj
-const Row9 = document.querySelector('.js-row9')
-const Row8 = document.querySelector('.js-row8')
-const Row7 = document.querySelector('.js-row7')
-const Row6 = document.querySelector('.js-row6')
-const Row5 = document.querySelector('.js-row5')
-let currentRow = Row9
-
-// create the peg bucket
-for (let i = 0; i < colors.length; i++) {
-  let BucketPeg = document.createElement('div')
-  BucketPeg.classList.add('bucketPeg', colors[i])
-  BucketPeg.id = colors[i]
-  pegBucket.appendChild(BucketPeg)
 }
 
-// make the bucketPegs alive
-// when the user clicks a bucketPeg, transfer that value to the div and object
-pegBucket.addEventListener('click', function(evt) {
-  selectedPegColor = evt.target.id
-  evt.target.classList.add('selectedPeg')
-  // console.log(selectedPegColor)
-})
+function createGuessButton (turn) {
+  let guessButton = document.createElement('button')
+  guessButton.classList.add('guessButton')
+  guessButton.value = 'Check your guess'
+  guessButton.textContent = 'Check your guess'
+  guessButton.addEventListener('click', function(){
+    checkGuess(turn)
+  })
+  body.appendChild(guessButton)
+}
 
-// make the current row alive
-currentRow.addEventListener('click', function(evt) {
-  // change the div style
-  evt.target.classList.add(selectedPegColor);
-  // give the object value
-  // let currentId =
-  targetPegObj = evt.target.id
-  assignPegToObject()
-})
+// formerly knows as the peg bucket
+function createPaintCan () {
+  for (let i = 0; i < colors.length; i++) {
+    // print paintCan to the DOM
+    let paintBrush = document.createElement('div')
+    paintBrush.classList.add('paintBrush', colors[i])
+    paintBrush.id = colors[i]
+    paintCan.appendChild(paintBrush)
+    // and make them active
+    paintCan.addEventListener('click', function(evt) {
+      // assign the color clicked to the active paint color var
+      currentColor = evt.target.id
+      // highlight which paint is selected
+      evt.target.classList.add('activePaintColor')
+    })
+  }
+}
+
+// function assignPegBucketEventListeners () {
+//   // make the bucketPegs alive
+//   // when the user clicks a bucketPeg, transfer that value to the div and object
+
+//     // make the current row alive
+//   .addEventListener('click', function(evt) {
+//     // change the div style
+//     evt.target.classList.add(currentColor);
+//     // give the object value
+//     targetPegObj = evt.target.id
+//     assignPegToObject()
+//   })
+// }
+
+function sendPaintColor (id) {
+        // send the held paint color
+      pegBoard[id[0]][id[1]].color = currentColor
+}
+
+function assignPegRowEventListeners (turn) {
+  // for loop that assings event listeners that call
+  for (i = 0; i < pegBoard[0].length; i++) {
+    let pegDiv = document.getElementById(pegBoard[turn][i].id)
+    pegDiv.addEventListener('click', function(){
+      sendPaintColor(this.id)
+      this.classList.add(currentColor)
+    })
+  }
+}
 
 // make function that takes the current div returns the object
-const assignPegToObject = function () {
-  let x = targetPegObj[0]
-  let y = targetPegObj[1]
-  let selectedPegObj = pegBoard[x][y]
-  selectedPegObj.color = selectedPegColor
-}
+// const assignPegToObject = function () {
+//   let x = targetPegObj[0]
+//   let y = targetPegObj[1]
+//   let selectedPegObj = pegBoard[x][y]
+//   selectedPegObj.color = currentColor
+// }
 
 // shuffle the colors array into master code array
 // https://stackoverflow.com/a/6274398
 
-const MasterCodeCreator = function () {
+function createMasterCodes () {
   // debugger;
   let choices = colors.length
   let counter = boardCells + 1
@@ -116,30 +151,28 @@ const MasterCodeCreator = function () {
   }
 }
 
-MasterCodeCreator()
-
-let currentPegRow = pegBoard[9]
+// let currentPegRow = pegBoard[9]
 
 console.log("the master code is",masterCodeValues)
 
-const checkGuess = function () {
-
+function checkGuess (turn) {
   let feedbackMatrix = []
 
   for (let i = 0; i < masterCodeValues.length; i++) {
     // compare every guess index only to matching master index
-    if (currentPegRow[i].color === masterCodeValues[i].color) {
-      console.log(currentPegRow[i].color,"matches",masterCodeValues[i].color)
-      currentPegRow[i].match = 2
+    console.log(pegBoard[turn][i])
+    if (pegBoard[turn][i].color === masterCodeValues[i].color) {
+      console.log(`${pegBoard[turn][i].color} matches ${masterCodeValues[i].color} in location ${i}`)
+      pegBoard[turn][i].match = 2
       masterCodeValues[i].match = true
     } else {
       // compare every guess index to every master index
       for (let x = 0; x < masterCodeValues.length; x++) {
         //
         if (masterCodeValues[x].match === false
-          && currentPegRow[i].color === masterCodeValues[x].color) {
-          console.log(currentPegRow[i].color,i,"matches a color at",x)
-          currentPegRow[i].match = 1
+          && pegBoard[turn][i].color === masterCodeValues[x].color) {
+          console.log(pegBoard[turn][i].color,i,"matches a color at",x)
+          pegBoard[turn][i].match = 1
           masterCodeValues[x].match = true
         }
       }
@@ -147,8 +180,8 @@ const checkGuess = function () {
   }
 
   // get all the match values into an array
-  for (let i = 0; i < currentPegRow.length; i++) {
-    feedbackMatrix.push(currentPegRow[i].match)
+  for (let i = 0; i < pegBoard[turn].length; i++) {
+    feedbackMatrix.push(pegBoard[turn][i].match)
   }
 
   console.log("feedback:",feedbackMatrix)
@@ -159,13 +192,47 @@ const checkGuess = function () {
     console.log("you win")
     } else {
     console.log(score)
-    }
+    nextTurn()
+  }
 
-    // now increment the turn value
+// if fewer than 4 pegs, prompt user to complete, return
+// if the guess is incorrect, alert saying so
+// deincrement current row
+// if guess is correct, end game
 
 }
 
-// 1. user selects peg color, color is held in variable selectedPegColor
+// function assignRowEventHandlers () {
+//   let totalCells = pegBoard.length * (boardCells + 1)
+//   console.log(totalCells)
+//   for (i = 0; i < totalCells; i++) {
+//     console.log(pegBoard[i])
+
+  // for (i = 0; i > -1; i--) {
+  // rows[i] = document.querySelector(`.js-row${i}`)
+  // loop through your ids in the pegboard array instead
+  // }
+// }
+
+function nextTurn () {
+  // assigns event listeners to currentTurn pegBoard array index
+  currentTurn --
+  // turns off event listeners
+  createGuessButton(currentTurn)
+  assignPegRowEventListeners(currentTurn)
+}
+
+function init () {
+  createBoardAndPegBoardObj()
+  createPaintCan()
+  currentTurn = 9
+  assignPegRowEventListeners(currentTurn)
+  createMasterCodes()
+  createGuessButton(currentTurn)
+}
+
+init()
+// 1. user selects peg color, color is held in variable currentColor
 // 2. user places color into peg hole, color is transferred to
 //    the div as a class and the object as a value
 // 3. user presses make guess button
@@ -173,8 +240,6 @@ const checkGuess = function () {
 
     // match 0 = no match, 1 = color match, 2 = color and location match
 
-// function that creates the master code
 
-// function that evaluates the user guess against the master
-
-
+// To Do
+// 1) display master code for testing
