@@ -93,10 +93,15 @@ function rinseOffPaintBrushes() {
   paintCan.classList.remove("activePaintColor");
 }
 
-function assignPaintColor(event) {
-  let id = event.target.id;
+function assignPaintColor(evt) {
+  // remove all paintbrush active classes
+  let id = evt.target.id;
+  evt.target.classList.remove('grey','purple','orange','blue','red','green')
   pegBoard[id[0]][id[1]].color = currentColor;
-  event.target.classList.add(currentColor);
+  // solving for edge case when user clicks peg before selecting color
+  if (currentColor != undefined) {
+  evt.target.classList.add(currentColor);
+}
 }
 
 function assignPegRowEventListeners(turn) {
@@ -140,7 +145,7 @@ function appendMasterCodesDiv() {
     eachMasterCode.classList.add(masterCodeValues[i].color);
     masterCodeDiv.appendChild(eachMasterCode);
   }
-  paintCan.appendChild(masterCodeDiv);
+  container.appendChild(masterCodeDiv);
 }
 
 function setMasterCodesFalse() {
@@ -156,8 +161,6 @@ function createFeedbackDiv() {
   for (i = 0; i <= boardRows; i++) {
     let feedbackRow = document.createElement("div");
     feedbackRow.classList.add("feedbackRow", i);
-    // this smells
-    feedbackRow.style.gridRowStart = i+1;
     // create the four boxes
     for (x = 0; x <= boardCells; x++) {
       let feedbackPeg = document.createElement("div");
