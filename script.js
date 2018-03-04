@@ -33,6 +33,7 @@ const boardCells = 3;
 let currentTurn = boardRows;
 let currentColor;
 let currentRow;
+let keyCounter = 0;
 let playerInitials = "Player";
 
 // for the modal
@@ -172,8 +173,6 @@ function assignPaintColor(evt) {
   }
 }
 
-let keyCounter = 0;
-
 function makePegRowKeyboardActive () {
     console.log("listening")
     document.addEventListener("keydown", assignKeyboardPainter);
@@ -211,13 +210,7 @@ function assignKeyboardPainter (evt) {
       break;
     case 87:
       document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.add('greyPeg')
-      pegBoard[currentTurn][keyCounter].color = 'bluePeg'
-      document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.remove('activePeg')
-      keyCounter++
-      break;
-    case 87:
-      document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.add('bluePeg')
-      pegBoard[currentTurn][keyCounter].color = 'bluePeg'
+      pegBoard[currentTurn][keyCounter].color = 'greyPeg'
       document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.remove('activePeg')
       keyCounter++
       break;
