@@ -89,6 +89,9 @@ font-family: 'Open Sans', sans-serif;
 
 .paintBrush {
   margin: .4em;
+  color: #37474f88;
+  padding-top: 7px;
+  font-size: 16px;
 }
 
 .guessButton {
@@ -124,14 +127,14 @@ font-family: 'Open Sans', sans-serif;
 }
 
 .masterCodeDiv {
-  border: 1px solid white;
-  grid-row: 8/10;
+  grid-row: 8/11;
   grid-column: 3;
   display:grid;
   grid-template-columns: 48px 48px 48px 48px;
   align-items: center;
   justify-content: center;
   flex-flow: wrap;
+  /*padding: 5px;*/
 }
 
 .masterCode {
@@ -154,7 +157,7 @@ font-family: 'Open Sans', sans-serif;
   height:40px;
   width:41px;
   text-align:center;
-  text-shadow:1px 1px 0px #ffffff;
+  /*text-shadow:1px 1px 0px #ffffff;*/
 }
 
 .activePeg {
@@ -175,7 +178,7 @@ font-family: 'Open Sans', sans-serif;
   height:40px;
   width:41px;
   text-align:center;
-  text-shadow:1px 1px 0px #ffffff;
+  /*text-shadow:1px 1px 0px #ffffff;*/
 }
 .greyPeg:hover {
   background-color:#e9e9e9;
@@ -197,7 +200,7 @@ font-family: 'Open Sans', sans-serif;
   width:41px;
   text-decoration:none;
   text-align:center;
-  text-shadow:1px 1px 0px #7d15cd;
+  /*text-shadow:1px 1px 0px #7d15cd;*/
 }
 .purplePeg:hover {
   background-color:#9575cd;
@@ -219,7 +222,7 @@ font-family: 'Open Sans', sans-serif;
   width:41px;
   text-decoration:none;
   text-align:center;
-  text-shadow:1px 1px 0px #cc9f52;
+  /*text-shadow:1px 1px 0px #cc9f52;*/
 }
 .orangePeg:hover {
   background-color:#ffd54f;
@@ -241,7 +244,7 @@ font-family: 'Open Sans', sans-serif;
   width:41px;
   text-decoration:none;
   text-align:center;
-  text-shadow:1px 1px 0px #528ecc;
+  /*text-shadow:1px 1px 0px #528ecc;*/
 }
 .bluePeg:hover {
   background-color:#4dd0e1;
@@ -263,7 +266,7 @@ font-family: 'Open Sans', sans-serif;
   width:41px;
   text-decoration:none;
   text-align:center;
-  text-shadow:1px 1px 0px #810e05;
+  /*text-shadow:1px 1px 0px #810e05;*/
 }
 .redPeg:hover {
   background-color:#e57373;
@@ -285,7 +288,7 @@ font-family: 'Open Sans', sans-serif;
   width:41px;
   text-decoration:none;
   text-align:center;
-  text-shadow:1px 1px 0px #86ae47;
+  /*text-shadow:1px 1px 0px #86ae47;*/
 }
 .greenPeg:hover {
   background-color:#aed581;

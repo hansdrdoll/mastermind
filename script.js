@@ -122,6 +122,16 @@ function showInstructions(stage) {
         ".instructions"
       ).textContent = `Check your feedback and make another guess!`;
       break;
+    case 3:
+      document.querySelector(
+        ".instructions"
+      ).textContent = `Better luck next time!`;
+      break;
+    case 4:
+      document.querySelector(
+        ".instructions"
+      ).textContent = `Congrats, you beat the mastermind!`;
+      break;
   }
 }
 
@@ -136,7 +146,7 @@ function createPaintCan() {
     let paintBrush = document.createElement("div");
     paintBrush.classList.add("paintBrush", newColors[i].color);
     paintBrush.id = newColors[i].color;
-
+    paintBrush.innerHTML = `${newColors[i].letter}`
     paintBrush.addEventListener("click", highlightPaintCan);
     paintCan.appendChild(paintBrush);
   }
@@ -176,7 +186,7 @@ function assignPegRowEventListeners(turn) {
 
 function removePegRowEventListeners(turn) {
   let oldTurn = turn + 1;
-  console.log("turning off previous listeners from", oldTurn);
+  // console.log("turning off previous listeners from", oldTurn);
   for (i = 0; i < pegBoard[0].length; i++) {
     let pegDiv = document.getElementById(pegBoard[oldTurn][i].id);
     pegDiv.removeEventListener("click", assignPaintColor);
@@ -211,7 +221,7 @@ function createMasterCodes() {
 
 function appendMasterCodesDiv() {
   let masterCodeDiv = document.createElement("div");
-  masterCodeDiv.classList.add("masterCodeDiv");
+  masterCodeDiv.classList.add("masterCodeDiv","card-panel","blue-grey","darken-2");
   document.querySelector(".paintCan").style.display = "none";
   for (i = 0; i < masterCodeValues.length; i++) {
     let eachMasterCode = document.createElement("div");
@@ -254,7 +264,7 @@ function makeFeedbackArray(turn) {
     feedbackMatrix.sort();
     // console.log(feedbackMatrix)
   }
-  console.log("feedback:", feedbackMatrix);
+  // console.log("feedback:", feedbackMatrix);
 }
 
 function checkScore() {
@@ -262,6 +272,8 @@ function checkScore() {
   if (score === 8) {
     console.log("you win");
     appendMasterCodesDiv();
+  } else if (currentTurn < 1) {
+    console.log("you lost")
   } else {
     printFeedback();
     showInstructions(1);
@@ -296,7 +308,7 @@ function checkGuess(turn) {
   // for each item check for full matches
   for (let i = 0; i < masterCodeValues.length; i++) {
     if (pegBoard[turn][i].color === masterCodeValues[i].color) {
-      // console.log("full match")
+      console.log(pegBoard[turn][i].color,masterCodeValues[i].color,"full match")
       pegBoard[turn][i].match = 2;
       masterCodeValues[i].match = true;
     }
@@ -306,8 +318,11 @@ function checkGuess(turn) {
       for (let x = 0; x < masterCodeValues.length; x++) {
         if (
           pegBoard[turn][i].color === masterCodeValues[x].color &&
-          masterCodeValues[x].match === false
+          masterCodeValues[x].match === false && pegBoard[turn][i].match === 0
         ) {
+          console.log("master code",masterCodeValues)
+          console.log("peg board",pegBoard[turn])
+          console.log(pegBoard[turn][i].color,masterCodeValues[x].color,"half match")
           pegBoard[turn][i].match = 1;
           masterCodeValues[x].match = true;
         }
@@ -347,6 +362,14 @@ function applyActivePegStyle() {
   }
 }
 
+function youLost () {
+  showInstructions(3)
+}
+
+function youWin () {
+  showInstructions(4)
+}
+
 function init() {
   currentTurn = boardRows;
   createBoardAndPegBoardObj();
@@ -361,7 +384,7 @@ function init() {
 
   //  $('#modal1').modal().modal('open');
   //  modalForm()
-  //  console.log("the master code is", masterCodeValues);
+   console.log("the master code is", masterCodeValues);
   printPlayerName();
 }
 
