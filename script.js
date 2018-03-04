@@ -152,11 +152,6 @@ function createPaintCan() {
   }
 }
 
-// make this work
-// function rinseOffPaintBrushes() {
-//   paintCan.classList.remove("activePaintColor");
-// }
-
 function assignPaintColor(evt) {
   // remove all paintbrush active classes
   let id = evt.target.id;
@@ -177,6 +172,69 @@ function assignPaintColor(evt) {
   }
 }
 
+let keyCounter = 0;
+
+function makePegRowKeyboardActive () {
+    console.log("listening")
+    document.addEventListener("keydown", assignKeyboardPainter);
+}
+
+function assignKeyboardPainter (evt) {
+  console.log(evt.keyCode)
+  if (evt.defaultPrevented) {
+    return; // Do nothing if the event was already processed
+  }
+  switch (evt.keyCode) {
+    case 66:
+      document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.add('bluePeg')
+      pegBoard[currentTurn][keyCounter].color = 'bluePeg'
+      document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.remove('activePeg')
+      keyCounter++
+      break;
+    case 77:
+      document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.add('purplePeg')
+      pegBoard[currentTurn][keyCounter].color = 'purplePeg'
+      document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.remove('activePeg')
+      keyCounter++
+      break;
+    case 71:
+      document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.add('greenPeg')
+      pegBoard[currentTurn][keyCounter].color = 'greenPeg'
+      document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.remove('activePeg')
+      keyCounter++
+      break;
+    case 79:
+      document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.add('orangePeg')
+      pegBoard[currentTurn][keyCounter].color = 'orangePeg'
+      document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.remove('activePeg')
+      keyCounter++
+      break;
+    case 87:
+      document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.add('greyPeg')
+      pegBoard[currentTurn][keyCounter].color = 'bluePeg'
+      document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.remove('activePeg')
+      keyCounter++
+      break;
+    case 87:
+      document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.add('bluePeg')
+      pegBoard[currentTurn][keyCounter].color = 'bluePeg'
+      document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.remove('activePeg')
+      keyCounter++
+      break;
+    case 82:
+      document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.add('redPeg')
+      pegBoard[currentTurn][keyCounter].color = 'redPeg'
+      document.getElementById(pegBoard[currentTurn][keyCounter].id).classList.remove('activePeg')
+      keyCounter++
+      break;
+    case 13:
+      checkGuess(currentTurn);
+    default:
+      return; // Quit when this doesn't handle the key event.
+  }
+  evt.preventDefault();
+}
+
 function assignPegRowEventListeners(turn) {
   for (i = 0; i < pegBoard[0].length; i++) {
     let pegDiv = document.getElementById(pegBoard[turn][i].id);
@@ -190,6 +248,7 @@ function removePegRowEventListeners(turn) {
   for (i = 0; i < pegBoard[0].length; i++) {
     let pegDiv = document.getElementById(pegBoard[oldTurn][i].id);
     pegDiv.removeEventListener("click", assignPaintColor);
+    pegDiv.removeEventListener("keydown", assignKeyboardPainter);
   }
 }
 
@@ -330,6 +389,7 @@ function checkGuess(turn) {
     }
   }
   makeFeedbackArray(currentTurn);
+  keyCounter = 0;
   checkScore();
 }
 
@@ -342,6 +402,7 @@ function nextTurn() {
   // reassign the event listeners
   removePegRowEventListeners(currentTurn);
   assignPegRowEventListeners(currentTurn);
+  makePegRowKeyboardActive(currentTurn);
   // currentRow.children.classList.add('activePeg')
 }
 
@@ -381,7 +442,7 @@ function init() {
   createMasterCodes();
   createGuessButton();
   showInstructions(0);
-
+  makePegRowKeyboardActive()
   //  $('#modal1').modal().modal('open');
   //  modalForm()
    console.log("the master code is", masterCodeValues);
