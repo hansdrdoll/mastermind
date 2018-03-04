@@ -1,9 +1,10 @@
 const body = document.querySelector("body");
 const container = document.querySelector(".gameContainer");
 // const board = document.querySelector(".js-board");
-const paintCan = document.querySelector(".js-paintCan");
+// const paintCan = document.querySelector(".js-paintCan");
+// let newPaintCan = document.createElement('div')
 
-const newColors = [
+let newColors = [
   { color: "bluePeg", letter: "B" },
   { color: "magentaPeg", letter: "M" },
   { color: "greenPeg", letter: "G" },
@@ -80,23 +81,9 @@ function printPlayerName() {
   container.appendChild(playerName);
 }
 
-function createGuessButton() {
-  let guessButton = document.createElement("button");
-  guessButton.classList.add(
-    `guessButton`,
-    `waves-effect`,
-    `waves-light`,
-    `btn`,
-    `blue-grey`,
-    `darken-2`
-  );
-  guessButton.textContent = "Guess";
-  guessButton.addEventListener("click", runCheckGuessButton);
-  paintCan.appendChild(guessButton);
-}
 
 function showInstructions(stage) {
-  let genericFeedbackInstructions = `<p><div class="feedbackPegFull" style="position:relative; top:2px; float: left;"></div>For each black peg, one of your guesses was the correct color in the correct location.<br><div class="feedbackPegHalf" style="position:relative; top:3px; float: left;"></div>For each white peg, one of your guesses was the correct color but in the wrong location.</p>`;
+  let genericFeedbackInstructions = `<p><div class="feedbackPegFull" style="position:relative; top:2px; float: left;"></div>For each black peg, one of your guesses was the correct color and in the correct location.<br><div class="feedbackPegHalf" style="position:relative; top:3px; float: left;"></div>For each white peg, one of your guesses was the correct color but in the wrong location.</p>`;
   switch (stage) {
     case 0:
       let instructions = document.createElement("div");
@@ -152,6 +139,8 @@ function runCheckGuessButton() {
 }
 
 function createPaintCan() {
+  let paintCan = document.createElement('div')
+  paintCan.classList.add("paintCan", "js-paintCan")
   for (let i = 0; i < newColors.length; i++) {
     let paintBrush = document.createElement("div");
     paintBrush.classList.add("paintBrush", newColors[i].color);
@@ -160,6 +149,22 @@ function createPaintCan() {
     paintBrush.addEventListener("click", highlightPaintCan);
     paintCan.appendChild(paintBrush);
   }
+  container.appendChild(paintCan)
+}
+
+function createGuessButton() {
+  let guessButton = document.createElement("button");
+  guessButton.classList.add(
+    `guessButton`,
+    `waves-effect`,
+    `waves-light`,
+    `btn`,
+    `blue-grey`,
+    `darken-2`
+  );
+  guessButton.textContent = "Guess";
+  guessButton.addEventListener("click", runCheckGuessButton);
+  document.querySelector('.js-paintCan').appendChild(guessButton);
 }
 
 function assignPaintColor(evt) {
@@ -294,6 +299,7 @@ function highlightPaintCan(evt) {
   evt.target.classList.add("activePaintColor");
 }
 
+
 function createMasterCodes() {
   // debugger;
   let choices = newColors.length;
@@ -307,6 +313,8 @@ function createMasterCodes() {
       let masterCode = new MasterCode(newColors[index].color);
       masterCodeValues.push(masterCode);
     }
+    // the maybe less smelly fix to my shuffle problem
+  newColors.pop()
   }
 }
 
@@ -336,13 +344,10 @@ function setMasterCodesFalse() {
 }
 
 function createFeedbackDiv() {
-  // get the div
   let feedbackWrapper = document.querySelector(".feedbackWrapper");
-  // create the row in the div
   for (i = 0; i <= boardRows; i++) {
     let feedbackRow = document.createElement("div");
     feedbackRow.classList.add("feedbackRow", i);
-    // create the four boxes
     for (x = 0; x <= boardCells; x++) {
       let feedbackPeg = document.createElement("div");
       feedbackPeg.classList.add("feedbackPeg");
@@ -353,15 +358,11 @@ function createFeedbackDiv() {
   }
 }
 
-// sort this array after generating it
 function makeFeedbackArray(turn) {
   for (let i = 0; i < pegBoard[turn].length; i++) {
     feedbackMatrix.push(pegBoard[turn][i].match);
-    // console.log(feedbackMatrix);
     feedbackMatrix.sort();
-    // console.log(feedbackMatrix)
   }
-  // console.log("feedback:", feedbackMatrix);
 }
 
 function checkScore() {
@@ -369,10 +370,12 @@ function checkScore() {
   if (score === 8) {
     console.log("you win");
     showInstructions(5);
+    appendResetGameButton();
     appendMasterCodesDiv();
   } else if (currentTurn < 1) {
     console.log("you lost");
     showInstructions(4);
+    appendResetGameButton();
     appendMasterCodesDiv();
   } else if (currentTurn < 2) {
     printFeedback();
@@ -450,6 +453,14 @@ function checkGuess(turn) {
   checkScore();
 }
 
+function appendResetGameButton () {
+  let resetGameButton = document.createElement('a')
+  resetGameButton.classList.add('reset-game-btn','waves-effect','waves-light','btn-large','blue-grey','darken-2')
+  resetGameButton.innerHTML = `<i class="material-icons left">replay</i>Again!`
+  document.querySelector('.instructions').appendChild(resetGameButton)
+  resetGameButton.addEventListener('click', resetGame)
+}
+
 function nextTurn() {
   // currentRow.classList.remove('activePeg')
   feedbackMatrix = [];
@@ -487,6 +498,24 @@ function youLost() {
 
 function youWin() {
   showInstructions(4);
+}
+
+function resetGame () {
+  masterCodeValues = [];
+  feedbackMatrix = [];
+  container.innerHTML = ""
+  currentTurn = boardRows;
+  createBoardAndPegBoardObj();
+  currentRow = document.querySelectorAll(`.row`)[currentTurn];
+  applyActivePegStyle();
+  printPlayerName();
+  createFeedbackDiv();
+  createPaintCan();
+  createMasterCodes();
+  createGuessButton();
+  showInstructions(0);
+  assignPegRowEventListeners(currentTurn);
+  makePegRowKeyboardActive(currentTurn);
 }
 
 function init() {

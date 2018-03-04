@@ -111,6 +111,11 @@ font-family: 'Open Sans', sans-serif;
   grid-column: 1/4;
 }
 
+.reset-game-btn {
+  position: absolute !important;
+  bottom: 40%;
+}
+
 .activePaintColor {
   animation: pulse 1.5s infinite linear alternate;
   /*transition: 1s;*/
