@@ -74,12 +74,7 @@ function createBoardAndPegBoardObj() {
   }
 }
 
-function printPlayerName() {
-  let playerName = document.createElement("div");
-  playerName.classList.add("playerInitals");
-  playerName.textContent = `Welcome, ${playerInitials}`;
-  container.appendChild(playerName);
-}
+
 
 
 function showInstructions(stage) {
@@ -188,7 +183,7 @@ function assignPaintColor(evt) {
 }
 
 function makePegRowKeyboardActive() {
-  document.addEventListener("keydown", assignKeyboardPainter);
+  document.addEventListener("keyup", assignKeyboardPainter);
 }
 
 function assignKeyboardPainter(evt) {
@@ -475,15 +470,30 @@ function nextTurn() {
   // currentRow.children.classList.add('activePeg')
 }
 
-function modalForm() {
-  let form = document.querySelector(".input-field");
-  let nameInput = document.querySelector(".playerInitials");
-  form.addEventListener("submit", function(evt) {
+
+function setPlayerNameAndDifficulty (evt) {
+  // console.log("im on")
     evt.preventDefault();
-    playerInitials = nameInput.value.toUpperCase();
+    playerInitials = document.querySelector(".playerInitials").value.toUpperCase();
     printPlayerName();
-  });
+    makePegRowKeyboardActive();
+    console.log(playerInitials)
 }
+
+function printPlayerName() {
+  let playerName = document.createElement("div");
+  playerName.classList.add("playerInitials");
+  playerName.textContent = `Welcome, ${playerInitials}`;
+  container.appendChild(playerName);
+}
+
+function modalForm() {
+  let form = document.querySelector("form");
+  let nameInput = document.querySelector(".playerInitials");
+  document.getElementById('input_text').focus()
+  form.addEventListener("submit", setPlayerNameAndDifficulty);
+}
+
 
 function applyActivePegStyle() {
   for (i = 0; i <= boardCells; i++) {
@@ -529,11 +539,12 @@ function init() {
   createMasterCodes();
   createGuessButton();
   showInstructions(0);
-  makePegRowKeyboardActive();
-  //  $('#modal1').modal().modal('open');
-  //  modalForm()
-  console.log("the master code is", masterCodeValues);
-  printPlayerName();
+
+  modalForm()
+  $('#modal1').modal().modal('open');
+
+  // console.log("the master code is", masterCodeValues);
+  // printPlayerName();
 }
 
 init();
