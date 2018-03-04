@@ -3,22 +3,40 @@
 <head>
   <title>Mastermind</title>
   <link rel="stylesheet" href="style.css">
+  <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+  <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+  <!-- <link href="https://fonts.googleapis.com/css?family=Biryani:900|Open+Sans" rel="stylesheet"> -->
+
 </head>
 <body>
-  <div class="container">
-    <!-- <h1>Mastermind</h1> -->
+  <div class="gameContainer card blue-grey lighten-3">
   <!-- <div class="board js-board"></div> -->
   <!-- <div class="feedbackWrapper js-feedbackWrapper"></div> -->
   <div class="paintCan js-paintCan"></div>
   </div>
 
-<div class="landing">
-<form class="form">
-  Name: <input type="text" class="name">
-  <button>Submit</button>
-</form>
-</div>
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h3>Welcome to Mastermind</h3>
+      <h5>Your goal: solve the code in as few attempts as possible.</h5>
+      <p>&nbsp;</p>
+       <div class="col s6">
+        <form class="input-field">
+          <i class="material-icons prefix">account_circle</i>
+          <input id="input_text" type="text" data-length="3" class="playerInitials">
+          <label for="input_text">Please enter your initals</label>
+          <button class="btn waves-effect waves-light modal-action modal-close" type="submit" name="action">Play!
+          <i class="material-icons right">videogame_asset</i>
+  </button></form>
+          </div>
+    </div>
+    <div class="modal-footer input-field">
+    </div>
+  </div>
 
-  <script src="script.js"></script>
+  <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+  <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script> -->
+  <script type="text/javascript" src="js/materialize.min.js"></script>
+  <script type="text/javascript" src="script.js"></script>
 </body>
 </html>

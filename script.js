@@ -1,9 +1,9 @@
 const body = document.querySelector("body");
-const container = document.querySelector(".container")
+const container = document.querySelector(".gameContainer")
 // const board = document.querySelector(".js-board");
 const paintCan = document.querySelector(".js-paintCan");
 
-const colors = ["blue", "purple", "green", "orange", "grey", "red"];
+const colors = ["bluePeg", "purplePeg", "greenPeg", "orangePeg", "greyPeg", "redPeg"];
 let pegBoard = [];
 let masterCodeValues = [];
 let feedbackMatrix = [];
@@ -14,8 +14,14 @@ const boardCells = 3;
 
 // this value equals the number of rows until deincremented by nextTurn
 let currentTurn = boardRows;
-
 let currentColor;
+let currentRow;
+let playerInitials = 'Player';
+
+// for the modal
+// let modal1 = $(document).ready(function(){
+//     $('.modal').modal();
+//   });
 
 class Pegs {
   constructor(id, color, match = 0) {
@@ -46,7 +52,7 @@ function createBoardAndPegBoardObj() {
     for (let y = 0; y <= boardCells; y++) {
       // create the html elements
       let newDiv = document.createElement("div");
-      newDiv.classList.add("white");
+      newDiv.classList.add("emptyPeg");
       newDiv.id = "" + x + y;
       row.appendChild(newDiv);
       // push the new object to the row array
@@ -56,18 +62,42 @@ function createBoardAndPegBoardObj() {
     // push the row array to the pegBoard
     pegBoard.push(rowArr);
   }
-  document.querySelectorAll(`.row`)[currentTurn].classList.add('activeRow')
+}
+
+function printPlayerName () {
+  let playerName = document.createElement('div')
+  playerName.classList.add("playerInitals")
+  playerName.textContent = `Welcome, ${playerInitials}`;
+  container.appendChild(playerName)
 }
 
 function createGuessButton() {
   let guessButton = document.createElement("button");
-  guessButton.classList.add("guessButton");
-  guessButton.textContent = "Check your guess";
+  guessButton.classList.add(`guessButton`,`waves-effect`,`waves-light`,`btn`,`blue-grey`,`darken-4`);
+  guessButton.textContent = "Guess";
   guessButton.addEventListener("click", runCheckGuessButton);
   paintCan.appendChild(guessButton);
 }
 
+function showInstructions (stage) {
+  switch (stage) {
+    case 0:
+      let instructions = document.createElement('div')
+      instructions.classList.add('instructions')
+      instructions.textContent = `Welcome to the game! The mastermind has selected a secret code. Your have ${boardRows + 1} attemtps to guess it!`
+      container.appendChild(instructions)
+    break;
+    case 1:
+      document.querySelector('.instructions').textContent = `Check your feedback and make another guess!`
+    break;
+    case 2:
+    break;
+  }
+}
+
 function runCheckGuessButton() {
+  // this should evaluate if user hasn't filled in options,
+  // like an accidential double click
   checkGuess(currentTurn);
 }
 
@@ -79,7 +109,7 @@ function createPaintCan() {
     paintCan.appendChild(paintBrush);
     paintCan.addEventListener("click", function(evt) {
       currentColor = evt.target.id;
-      evt.target.classList.add("activePaintColor");
+      // evt.target.classList.add("activePaintColor");
     });
   }
 }
@@ -96,7 +126,7 @@ function rinseOffPaintBrushes() {
 function assignPaintColor(evt) {
   // remove all paintbrush active classes
   let id = evt.target.id;
-  evt.target.classList.remove('grey','purple','orange','blue','red','green')
+  evt.target.classList.remove('greyPeg','purplePeg','orangePeg','bluePeg','redPeg','greenPeg','activePeg','emptyPeg')
   pegBoard[id[0]][id[1]].color = currentColor;
   // solving for edge case when user clicks peg before selecting color
   if (currentColor != undefined) {
@@ -176,6 +206,9 @@ function createFeedbackDiv() {
 function makeFeedbackArray(turn) {
   for (let i = 0; i < pegBoard[turn].length; i++) {
     feedbackMatrix.push(pegBoard[turn][i].match);
+    console.log(feedbackMatrix)
+    feedbackMatrix.sort()
+    // console.log(feedbackMatrix)
   }
   console.log("feedback:", feedbackMatrix);
 }
@@ -187,6 +220,7 @@ function checkScore() {
     appendMasterCodesDiv();
   } else {
     printFeedback();
+    showInstructions(1);
     feedbackMatrix = [];
     nextTurn();
   }
@@ -197,16 +231,18 @@ function printFeedback() {
   // 'f' prepends the element id, x = current turn, i = element index
   for (i = 0; i <= boardCells; i++) {
     let feedbackPeg = document.getElementById(`f${currentTurn}${i}`);
-    console.log(feedbackPeg);
-    console.log(`print ${feedbackMatrix[i]}`);
+    // console.log(feedbackPeg);
+    // console.log(`print ${feedbackMatrix[i]}`);
     switch (feedbackMatrix[i]) {
       case 0:
-        feedbackPeg.classList.add("noMatch");
+        // feedbackPeg.classList.add("noMatch");
         break;
       case 1:
+        feedbackPeg.classList.remove("feedbackPeg");
         feedbackPeg.classList.add("feedbackPegHalf");
         break;
       case 2:
+        feedbackPeg.classList.remove("feedbackPeg");
         feedbackPeg.classList.add("feedbackPegFull");
     }
   }
@@ -237,36 +273,53 @@ function checkGuess(turn) {
   makeFeedbackArray(currentTurn);
   checkScore();
 }
-// get all the match values into an array
-
-// in class form creation
-let form = document.querySelector(".form");
-let nameImput = document.querySelector(".name");
-form.addEventListener("submit", function(evt) {
-  evt.preventDefault();
-  console.log(nameImput.value);
-});
-
 
 function nextTurn() {
-  document.querySelectorAll(`.row`)[currentTurn].classList.remove('activeRow')
+  // currentRow.classList.remove('activePeg')
   currentTurn--;
+  currentRow = document.querySelectorAll(`.row`)[currentTurn]
   setMasterCodesFalse();
+  applyActivePegStyle();
   // reassign the event listeners
   removePegRowEventListeners(currentTurn);
   assignPegRowEventListeners(currentTurn);
-  document.querySelectorAll(`.row`)[currentTurn].classList.add('activeRow')
+  // currentRow.children.classList.add('activePeg')
+}
+
+function modalForm() {
+  let form = document.querySelector(".input-field");
+  let nameInput = document.querySelector(".playerInitials");
+  form.addEventListener("submit", function(evt) {
+  evt.preventDefault();
+  playerInitials = nameInput.value.toUpperCase();
+  printPlayerName();
+  });
+}
+
+function applyActivePegStyle () {
+  for (i = 0; i <= boardCells; i++) {
+    let activePeg = currentRow.children[i]
+    activePeg.classList.add('activePeg')
+  }
 }
 
 function init() {
+  currentTurn = boardRows;
   createBoardAndPegBoardObj();
+  currentRow = document.querySelectorAll(`.row`)[currentTurn]
+  applyActivePegStyle();
   createPaintCan();
   createFeedbackDiv();
-  currentTurn = boardRows;
   assignPegRowEventListeners(currentTurn);
   createMasterCodes();
   createGuessButton();
-  // console.log("the master code is", masterCodeValues);
+  showInstructions(0);
+
+
+//  $('#modal1').modal().modal('open');
+//  modalForm()
+//  console.log("the master code is", masterCodeValues);
+  printPlayerName()
 }
 
 init();
