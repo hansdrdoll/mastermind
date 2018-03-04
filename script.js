@@ -1,9 +1,26 @@
 const body = document.querySelector("body");
-const container = document.querySelector(".gameContainer")
+const container = document.querySelector(".gameContainer");
 // const board = document.querySelector(".js-board");
 const paintCan = document.querySelector(".js-paintCan");
 
-const colors = ["bluePeg", "purplePeg", "greenPeg", "orangePeg", "greyPeg", "redPeg"];
+// const colors = [
+//   "bluePeg",
+//   "purplePeg",
+//   "greenPeg",
+//   "orangePeg",
+//   "greyPeg",
+//   "redPeg"
+// ];
+
+const newColors = [
+  { color: "bluePeg", letter: "B" },
+  { color: "purplePeg", letter: "M" },
+  { color: "greenPeg", letter: "G" },
+  { color: "orangePeg", letter: "O" },
+  { color: "greyPeg", letter: "W" },
+  { color: "redPeg", letter: "R" }
+];
+
 let pegBoard = [];
 let masterCodeValues = [];
 let feedbackMatrix = [];
@@ -16,7 +33,7 @@ const boardCells = 3;
 let currentTurn = boardRows;
 let currentColor;
 let currentRow;
-let playerInitials = 'Player';
+let playerInitials = "Player";
 
 // for the modal
 // let modal1 = $(document).ready(function(){
@@ -64,34 +81,47 @@ function createBoardAndPegBoardObj() {
   }
 }
 
-function printPlayerName () {
-  let playerName = document.createElement('div')
-  playerName.classList.add("playerInitals")
+function printPlayerName() {
+  let playerName = document.createElement("div");
+  playerName.classList.add("playerInitals");
   playerName.textContent = `Welcome, ${playerInitials}`;
-  container.appendChild(playerName)
+  container.appendChild(playerName);
 }
 
 function createGuessButton() {
   let guessButton = document.createElement("button");
-  guessButton.classList.add(`guessButton`,`waves-effect`,`waves-light`,`btn`,`blue-grey`,`darken-4`);
+  guessButton.classList.add(
+    `guessButton`,
+    `waves-effect`,
+    `waves-light`,
+    `btn`,
+    `blue-grey`,
+    `darken-4`
+  );
   guessButton.textContent = "Guess";
   guessButton.addEventListener("click", runCheckGuessButton);
   paintCan.appendChild(guessButton);
 }
 
-function showInstructions (stage) {
+function showInstructions(stage) {
   switch (stage) {
     case 0:
-      let instructions = document.createElement('div')
-      instructions.classList.add('instructions')
-      instructions.textContent = `Welcome to the game! The mastermind has selected a secret code. Your have ${boardRows + 1} attemtps to guess it!`
-      container.appendChild(instructions)
-    break;
+      let instructions = document.createElement("div");
+      instructions.classList.add("instructions");
+      instructions.textContent = `Welcome to the game! The mastermind has selected a secret code. Your have ${boardRows +
+        1} attemtps to guess it!`;
+      container.appendChild(instructions);
+      break;
     case 1:
-      document.querySelector('.instructions').textContent = `Check your feedback and make another guess!`
-    break;
+      document.querySelector(
+        ".instructions"
+      ).textContent = `Check your feedback and make another guess!`;
+      break;
     case 2:
-    break;
+      document.querySelector(
+        ".instructions"
+      ).textContent = `Check your feedback and make another guess!`;
+      break;
   }
 }
 
@@ -102,36 +132,39 @@ function runCheckGuessButton() {
 }
 
 function createPaintCan() {
-  for (let i = 0; i < colors.length; i++) {
+  for (let i = 0; i < newColors.length; i++) {
     let paintBrush = document.createElement("div");
-    paintBrush.classList.add("paintBrush", colors[i]);
-    paintBrush.id = colors[i];
+    paintBrush.classList.add("paintBrush", newColors[i].color);
+    paintBrush.id = newColors[i].color;
+
+    paintBrush.addEventListener("click", highlightPaintCan);
     paintCan.appendChild(paintBrush);
-    paintCan.addEventListener("click", function(evt) {
-      currentColor = evt.target.id;
-      // evt.target.classList.add("activePaintColor");
-    });
   }
 }
 
-function highlightPaintCan(color) {
-  paintCan.classList.add(color);
-}
-
 // make this work
-function rinseOffPaintBrushes() {
-  paintCan.classList.remove("activePaintColor");
-}
+// function rinseOffPaintBrushes() {
+//   paintCan.classList.remove("activePaintColor");
+// }
 
 function assignPaintColor(evt) {
   // remove all paintbrush active classes
   let id = evt.target.id;
-  evt.target.classList.remove('greyPeg','purplePeg','orangePeg','bluePeg','redPeg','greenPeg','activePeg','emptyPeg')
+  evt.target.classList.remove(
+    "greyPeg",
+    "purplePeg",
+    "orangePeg",
+    "bluePeg",
+    "redPeg",
+    "greenPeg",
+    "activePeg",
+    "emptyPeg"
+  );
   pegBoard[id[0]][id[1]].color = currentColor;
   // solving for edge case when user clicks peg before selecting color
   if (currentColor != undefined) {
-  evt.target.classList.add(currentColor);
-}
+    evt.target.classList.add(currentColor);
+  }
 }
 
 function assignPegRowEventListeners(turn) {
@@ -150,17 +183,27 @@ function removePegRowEventListeners(turn) {
   }
 }
 
+function highlightPaintCan(evt) {
+  currentColor = evt.target.id;
+  let allBrushes = document.querySelectorAll(".paintBrush");
+  // omg so this is the only easy way to loop over a node list
+  for (let brush of allBrushes) {
+    brush.classList.remove("activePaintColor");
+  }
+  evt.target.classList.add("activePaintColor");
+}
+
 function createMasterCodes() {
   // debugger;
-  let choices = colors.length;
+  let choices = newColors.length;
   let counter = boardCells + 1;
   for (i = 0; i < counter; i++) {
     while (counter > 0) {
       let index = Math.floor(Math.random() * choices);
       counter--;
       // swap the last element with it
-      colors[choices] = colors[index];
-      let masterCode = new MasterCode(colors[index]);
+      newColors[choices] = newColors[index];
+      let masterCode = new MasterCode(newColors[index].color);
       masterCodeValues.push(masterCode);
     }
   }
@@ -169,6 +212,7 @@ function createMasterCodes() {
 function appendMasterCodesDiv() {
   let masterCodeDiv = document.createElement("div");
   masterCodeDiv.classList.add("masterCodeDiv");
+  document.querySelector(".paintCan").style.display = "none";
   for (i = 0; i < masterCodeValues.length; i++) {
     let eachMasterCode = document.createElement("div");
     eachMasterCode.classList.add("masterCode");
@@ -206,8 +250,8 @@ function createFeedbackDiv() {
 function makeFeedbackArray(turn) {
   for (let i = 0; i < pegBoard[turn].length; i++) {
     feedbackMatrix.push(pegBoard[turn][i].match);
-    console.log(feedbackMatrix)
-    feedbackMatrix.sort()
+    console.log(feedbackMatrix);
+    feedbackMatrix.sort();
     // console.log(feedbackMatrix)
   }
   console.log("feedback:", feedbackMatrix);
@@ -277,7 +321,7 @@ function checkGuess(turn) {
 function nextTurn() {
   // currentRow.classList.remove('activePeg')
   currentTurn--;
-  currentRow = document.querySelectorAll(`.row`)[currentTurn]
+  currentRow = document.querySelectorAll(`.row`)[currentTurn];
   setMasterCodesFalse();
   applyActivePegStyle();
   // reassign the event listeners
@@ -290,23 +334,23 @@ function modalForm() {
   let form = document.querySelector(".input-field");
   let nameInput = document.querySelector(".playerInitials");
   form.addEventListener("submit", function(evt) {
-  evt.preventDefault();
-  playerInitials = nameInput.value.toUpperCase();
-  printPlayerName();
+    evt.preventDefault();
+    playerInitials = nameInput.value.toUpperCase();
+    printPlayerName();
   });
 }
 
-function applyActivePegStyle () {
+function applyActivePegStyle() {
   for (i = 0; i <= boardCells; i++) {
-    let activePeg = currentRow.children[i]
-    activePeg.classList.add('activePeg')
+    let activePeg = currentRow.children[i];
+    activePeg.classList.add("activePeg");
   }
 }
 
 function init() {
   currentTurn = boardRows;
   createBoardAndPegBoardObj();
-  currentRow = document.querySelectorAll(`.row`)[currentTurn]
+  currentRow = document.querySelectorAll(`.row`)[currentTurn];
   applyActivePegStyle();
   createPaintCan();
   createFeedbackDiv();
@@ -315,11 +359,10 @@ function init() {
   createGuessButton();
   showInstructions(0);
 
-
-//  $('#modal1').modal().modal('open');
-//  modalForm()
-//  console.log("the master code is", masterCodeValues);
-  printPlayerName()
+  //  $('#modal1').modal().modal('open');
+  //  modalForm()
+  //  console.log("the master code is", masterCodeValues);
+  printPlayerName();
 }
 
 init();

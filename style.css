@@ -43,7 +43,7 @@ font-family: 'Open Sans', sans-serif;
   grid-template-columns: 230px 50px 220px;
   grid-template-rows: repeat(10, 3em);
   grid-column-gap: .5em;
-  grid-row-gap: .1em;
+  grid-row-gap: .3em;
   grid-auto-flow: column;
   justify-content: center;
   padding: 30px;
@@ -60,13 +60,7 @@ font-family: 'Open Sans', sans-serif;
   grid-template-rows: repeat(10, 3em);
   grid-auto-flow: row;
   box-shadow:inset 0px 0px 0px 0px #ffffff;
-/*    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
-    background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
-    background-color:#ededed;
-*/    border-radius:0px;
-  /*border:1px solid #dcdcdc;*/
-  color:#777777;
+  border-radius:0px;
   height:3em;
   text-align:center;
 }
@@ -84,7 +78,6 @@ font-family: 'Open Sans', sans-serif;
 }
 
 .paintCan {
-  /*border: 1px solid orange;*/
   text-align: center;
   grid-row: 8/10;
   grid-column: 3;
@@ -92,9 +85,6 @@ font-family: 'Open Sans', sans-serif;
   grid-template-columns: 48px 48px 48px;
   align-items: center;
   justify-content: center;
-/*  flex-flow: wrap;
-  align-content: center;
-  justify-content: center;*/
 }
 
 .paintBrush {
@@ -106,7 +96,20 @@ font-family: 'Open Sans', sans-serif;
 }
 
 .activePaintColor {
-  /*border:1px solid black;*/
+  animation: pulse 1.5s infinite linear alternate;
+  /*transition: 1s;*/
+}
+@keyframes pulse {
+  0% {
+  box-shadow:
+  inset 0 1px 2px #ffffff,
+  0 1px 1px #ffffff;
+  }
+  100% {
+  box-shadow:
+  inset 0 1px 2px #ffffff55,
+  0 1px 1px #ffffff33;
+  }
 }
 
 .feedbackRow {
@@ -122,12 +125,17 @@ font-family: 'Open Sans', sans-serif;
 
 .masterCodeDiv {
   border: 1px solid white;
+  grid-row: 8/10;
+  grid-column: 3;
+  display:grid;
+  grid-template-columns: 48px 48px 48px 48px;
+  align-items: center;
+  justify-content: center;
+  flex-flow: wrap;
 }
 
 .masterCode {
   /*border:1px solid red;*/
-  grid-row: 3;
-  grid-column: 3;
   width: 2em;
   height: 2em;
   display: inline-block;
@@ -155,6 +163,7 @@ font-family: 'Open Sans', sans-serif;
   background: linear-gradient(#ffffff44, #f0f0f022);
   /*background-color:#f9f9f94d;*/
   border:1px solid #ffffff55;
+  animation: pulse 1.5s infinite linear alternate
 }
 
 .greyPeg {
