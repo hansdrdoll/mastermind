@@ -1,8 +1,5 @@
 const body = document.querySelector("body");
 const container = document.querySelector(".gameContainer");
-// const board = document.querySelector(".js-board");
-// const paintCan = document.querySelector(".js-paintCan");
-// let newPaintCan = document.createElement('div')
 
 let newColors = [
   { color: "bluePeg", letter: "B" },
@@ -17,21 +14,14 @@ let pegBoard = [];
 let masterCodeValues = [];
 let feedbackMatrix = [];
 
-// this can become user toggleable for difficulty level
 const boardRows = 9;
-let boardCells;
+let boardCells = 0;
 
-// this value equals the number of rows until deincremented by nextTurn
 let currentTurn = boardRows;
 let currentColor;
 let currentRow;
 let keyCounter = 0;
 let playerInitials = "Player";
-
-// for the modal
-// let modal1 = $(document).ready(function(){
-//     $('.modal').modal();
-//   });
 
 class Pegs {
   constructor(id, color, match = 0) {
@@ -49,18 +39,15 @@ class MasterCode {
   }
 }
 
-// create the board
 function createBoardAndPegBoardObj() {
   for (let x = 0; x <= boardRows; x++) {
-    // create the html row
     let row = document.createElement("div");
     row.classList.add("row", "js-row" + x);
-    if (boardCells === 5){
-      row.classList.add("rowHard")
-      container.classList.add("containerHard")
+    if (boardCells === 5) {
+      row.classList.add("rowHard");
+      container.classList.add("containerHard");
     }
     container.appendChild(row);
-    // make an array for this row
     let rowArr = [];
 
     for (let y = 0; y <= boardCells; y++) {
@@ -73,7 +60,6 @@ function createBoardAndPegBoardObj() {
       let newPeg = new Pegs("" + x + y);
       rowArr.push(newPeg);
     }
-    // push the row array to the pegBoard
     pegBoard.push(rowArr);
   }
 }
@@ -89,34 +75,33 @@ function showInstructions(stage) {
         "blue-grey",
         "lighten-3"
       );
-      instructions.innerHTML = `<p>Welcome! The mastermind has selected a secret code. Your can make ${boardRows +
-        1} guesses!</p><p>Start by selecting a color and placing it in the highlighted row. You can also use your keyboard.</p>`;
+      instructions.innerHTML = `<h6>The mastermind has selected a secret code. You can make ${boardRows + 1} guesses!</h6><p>Start by selecting a color and placing it in the highlighted row.</p>`;
       container.appendChild(instructions);
       break;
     case 1:
       document.querySelector(
         ".instructions"
-      ).innerHTML = `<p>You're on the right track!</p>${genericFeedbackInstructions}`;
+      ).innerHTML = `<h6>You're on the right track!</h6>${genericFeedbackInstructions}`;
       break;
     case 2:
       document.querySelector(
         ".instructions"
-      ).innerHTML = `<p>You're so close!</p>${genericFeedbackInstructions}`;
+      ).innerHTML = `<h6>You're so close!</h6>${genericFeedbackInstructions}`;
       break;
     case 3:
       document.querySelector(
         ".instructions"
-      ).innerHTML = `<p>None of your guesses match the master code. Make another guess!</p>`;
+      ).innerHTML = `<h6>None of your guesses match the master code. Make another guess!</h6>`;
       break;
     case 4:
       document.querySelector(
         ".instructions"
-      ).innerHTML = `Better luck next time!`;
+      ).innerHTML = `<h5>Better luck next time!</h5>`;
       break;
     case 5:
       document.querySelector(
         ".instructions"
-      ).innerHTML = `Congrats, you beat the mastermind!`;
+      ).innerHTML = `<h5>Congrats, you beat the mastermind!</h5>`;
       break;
     case 6:
       document.querySelector(
@@ -135,8 +120,8 @@ function runCheckGuessButton() {
 }
 
 function createPaintCan() {
-  let paintCan = document.createElement('div')
-  paintCan.classList.add("paintCan", "js-paintCan")
+  let paintCan = document.createElement("div");
+  paintCan.classList.add("paintCan", "js-paintCan");
   for (let i = 0; i < newColors.length; i++) {
     let paintBrush = document.createElement("div");
     paintBrush.classList.add("paintBrush", newColors[i].color);
@@ -145,31 +130,30 @@ function createPaintCan() {
     paintBrush.addEventListener("click", highlightPaintCan);
     paintCan.appendChild(paintBrush);
   }
-  container.appendChild(paintCan)
+  container.appendChild(paintCan);
   if (newColors.length === 4) {
-    paintCan.classList.add("paintCanEasy")
-    document.querySelector('.greenPeg').classList.add('paintBrushEasy')
-    document.querySelector('.orangePeg').classList.add('paintBrushEasy')
+    paintCan.classList.add("paintCanEasy");
+    document.querySelector(".greenPeg").classList.add("paintBrushEasy");
+    document.querySelector(".orangePeg").classList.add("paintBrushEasy");
   }
 }
 
 function createGuessButton() {
   let guessButton = document.createElement("button");
   guessButton.classList.add(
-    `guessButton`,
-    `waves-effect`,
-    `waves-light`,
-    `btn`,
-    `blue-grey`,
-    `darken-2`
+    "guessButton",
+    "waves-effect",
+    "waves-light",
+    "btn",
+    "blue-grey",
+    "darken-2"
   );
   guessButton.textContent = "Guess";
   guessButton.addEventListener("click", runCheckGuessButton);
-  document.querySelector('.js-paintCan').appendChild(guessButton);
+  document.querySelector(".js-paintCan").appendChild(guessButton);
 }
 
 function assignPaintColor(evt) {
-  // remove all paintbrush active classes
   let id = evt.target.id;
   evt.target.classList.remove(
     "whitePeg",
@@ -189,9 +173,10 @@ function assignPaintColor(evt) {
 }
 
 function makePegRowKeyboardActive() {
-  document.addEventListener("keyup", assignKeyboardPainter);
+  document.addEventListener("keydown", assignKeyboardPainter);
 }
 
+// thanks w3schools for this key listener switch example!
 function assignKeyboardPainter(evt) {
   if (evt.defaultPrevented) {
     return; // Do nothing if the event was already processed
@@ -259,16 +244,15 @@ function assignKeyboardPainter(evt) {
       break;
     case 13:
       runCheckGuessButton();
-    // checkGuess(currentTurn);
     default:
       return; // Quit when this doesn't handle the key event.
   }
   if (keyCounter > boardCells) {
     setTimeout(function() {
       if (keyCounter > boardCells) {
-        Materialize.toast(`Press return to submit your guess.`, 1500);
+        Materialize.toast(`Press return to submit your guess.`, 2000);
       }
-    }, 2000);
+    }, 4000);
   }
   evt.preventDefault();
 }
@@ -293,16 +277,15 @@ function removePegRowEventListeners(turn) {
 function highlightPaintCan(evt) {
   currentColor = evt.target.id;
   let allBrushes = document.querySelectorAll(".paintBrush");
-  // omg so this is the only easy way to loop over a node list
+  // omg turns out this is the only easy way to loop over a node list
   for (let brush of allBrushes) {
     brush.classList.remove("activePaintColor");
   }
   evt.target.classList.add("activePaintColor");
 }
 
-
 function createMasterCodes() {
-  // debugger;
+  // https://www.w3resource.com/javascript-exercises/javascript-array-exercise-17.php
   let choices = newColors.length;
   let counter = boardCells + 1;
   for (i = 0; i < counter; i++) {
@@ -314,8 +297,8 @@ function createMasterCodes() {
       let masterCode = new MasterCode(newColors[index].color);
       masterCodeValues.push(masterCode);
     }
-    // the maybe less smelly fix to my shuffle problem
-  newColors.pop()
+    // i picked a bad way to shuffle and this is how i pay for it
+    newColors.pop();
   }
 }
 
@@ -329,7 +312,7 @@ function appendMasterCodesDiv() {
     "fade"
   );
   if (boardCells === 5) {
-    masterCodeDiv.classList.add("masterCodeDivHard")
+    masterCodeDiv.classList.add("masterCodeDivHard");
   }
   document.querySelector(".paintCan").style.display = "none";
   for (i = 0; i < masterCodeValues.length; i++) {
@@ -353,7 +336,7 @@ function createFeedbackDiv() {
     let feedbackRow = document.createElement("div");
     feedbackRow.classList.add("feedbackRow", i);
     if (boardCells === 5) {
-      feedbackRow.classList.add("feedbackRowHard")
+      feedbackRow.classList.add("feedbackRowHard");
     }
     for (x = 0; x <= boardCells; x++) {
       let feedbackPeg = document.createElement("div");
@@ -421,11 +404,9 @@ function printFeedback() {
   // 'f' prepends the element id, x = current turn, i = element index
   for (i = 0; i <= boardCells; i++) {
     let feedbackPeg = document.getElementById(`f${currentTurn}${i}`);
-    // console.log(feedbackPeg);
     // console.log(`print ${feedbackMatrix[i]}`);
     switch (feedbackMatrix[i]) {
       case 0:
-        // feedbackPeg.classList.add("noMatch");
         break;
       case 1:
         feedbackPeg.classList.remove("feedbackPeg");
@@ -439,7 +420,6 @@ function printFeedback() {
 }
 
 function checkGuess(turn) {
-  // for each item check for full matches
   for (let i = 0; i < masterCodeValues.length; i++) {
     if (pegBoard[turn][i].color === masterCodeValues[i].color) {
       // console.log(pegBoard[turn][i].color,masterCodeValues[i].color,"full match")
@@ -455,9 +435,6 @@ function checkGuess(turn) {
           masterCodeValues[x].match === false &&
           pegBoard[turn][i].match === 0
         ) {
-          // console.log("master code",masterCodeValues)
-          // console.log("peg board",pegBoard[turn])
-          // console.log(pegBoard[turn][i].color,masterCodeValues[x].color,"half match")
           pegBoard[turn][i].match = 1;
           masterCodeValues[x].match = true;
         }
@@ -469,16 +446,22 @@ function checkGuess(turn) {
   checkScore();
 }
 
-function appendResetGameButton () {
-  let resetGameButton = document.createElement('a')
-  resetGameButton.classList.add('reset-game-btn','waves-effect','waves-light','btn-large','blue-grey','darken-2')
-  resetGameButton.innerHTML = `<i class="material-icons left">replay</i>Again!`
-  document.querySelector('.instructions').appendChild(resetGameButton)
-  resetGameButton.addEventListener('click', resetGame)
+function appendResetGameButton() {
+  let resetGameButton = document.createElement("a");
+  resetGameButton.classList.add(
+    "reset-game-btn",
+    "waves-effect",
+    "waves-light",
+    "btn-large",
+    "blue-grey",
+    "darken-2"
+  );
+  resetGameButton.innerHTML = `<i class="material-icons left">replay</i>Again!`;
+  document.querySelector(".instructions").appendChild(resetGameButton);
+  resetGameButton.addEventListener("click", resetGame);
 }
 
 function nextTurn() {
-  // currentRow.classList.remove('activePeg')
   feedbackMatrix = [];
   currentTurn--;
   currentRow = document.querySelectorAll(`.row`)[currentTurn];
@@ -488,36 +471,37 @@ function nextTurn() {
   removePegRowEventListeners(currentTurn);
   assignPegRowEventListeners(currentTurn);
   makePegRowKeyboardActive(currentTurn);
-  // currentRow.children.classList.add('activePeg')
 }
 
-
-function setPlayerNameAndDifficulty (evt) {
-  // console.log("im on")
-    evt.preventDefault();
-    let difficulty = document.querySelector('input[name="difficulty"]:checked').id
-    console.log(difficulty)
-    setDifficultyLevel(difficulty)
-    playerInitials = document.querySelector(".playerInitials").value.toUpperCase();
-    printPlayerName();
-    makePegRowKeyboardActive();
-    console.log(playerInitials)
+function setPlayerNameAndDifficulty(evt) {
+  evt.preventDefault();
+  let difficulty = document.querySelector('input[name="difficulty"]:checked')
+    .id;
+  console.log(difficulty);
+  setDifficultyLevel(difficulty);
+  playerInitials = document
+    .querySelector(".playerInitials")
+    .value.toUpperCase();
+  printPlayerName();
 }
 
 function printPlayerName() {
   let playerName = document.createElement("div");
   playerName.classList.add("playerInitials");
-  playerName.textContent = `Welcome, ${playerInitials}`;
+  if (playerInitials != "") {
+    playerName.textContent = `Welcome, ${playerInitials}`;
+  } else {
+    playerName.textContent = `Welcome, player`;
+  }
   container.appendChild(playerName);
 }
 
 function modalForm() {
   let form = document.querySelector("form");
   let nameInput = document.querySelector(".playerInitials");
-  document.getElementById('input_text').focus()
+  document.getElementById("input_text").focus();
   form.addEventListener("submit", setPlayerNameAndDifficulty);
 }
-
 
 function applyActivePegStyle() {
   for (i = 0; i <= boardCells; i++) {
@@ -526,72 +510,50 @@ function applyActivePegStyle() {
   }
 }
 
-function setDifficultyLevel (diff) {
+function setDifficultyLevel(diff) {
   switch (diff) {
     case "easy":
       boardCells = 3;
-      newColors.pop()
-      newColors.pop()
-      createBoardAndPegBoardObj();
-      createMasterCodes()
-      createFeedbackDiv();
-      assignPegRowEventListeners(currentTurn);
-      currentRow = document.querySelectorAll(`.row`)[currentTurn];
-      applyActivePegStyle();
-      showInstructions(0);
-      createPaintCan()
-      createGuessButton();
+      newColors.pop();
+      newColors.pop();
       break;
     case "normal":
       boardCells = 3;
-      createBoardAndPegBoardObj();
-      createMasterCodes()
-      createFeedbackDiv();
-      assignPegRowEventListeners(currentTurn);
-      currentRow = document.querySelectorAll(`.row`)[currentTurn];
-      applyActivePegStyle();
-      showInstructions(0);
-      createPaintCan()
-      createGuessButton();
       break;
     case "hard":
       boardCells = 5;
-      createBoardAndPegBoardObj();
-      createMasterCodes()
-      createFeedbackDiv();
-      assignPegRowEventListeners(currentTurn);
-      currentRow = document.querySelectorAll(`.row`)[currentTurn];
-      applyActivePegStyle();
-      showInstructions(0);
-      createPaintCan()
-      createGuessButton();
   }
+  buildABoard();
 }
 
-function resetGame () {
+function resetGame() {
   masterCodeValues = [];
   feedbackMatrix = [];
-  container.innerHTML = ""
+  container.innerHTML = "";
   currentTurn = boardRows;
+  buildABoard();
+  printPlayerName();
+}
+
+function buildABoard() {
   createBoardAndPegBoardObj();
+  createMasterCodes();
+  createFeedbackDiv();
+  assignPegRowEventListeners(currentTurn);
   currentRow = document.querySelectorAll(`.row`)[currentTurn];
   applyActivePegStyle();
-  printPlayerName();
-  createFeedbackDiv();
-  createPaintCan();
-  createMasterCodes();
-  createGuessButton();
   showInstructions(0);
-  assignPegRowEventListeners(currentTurn);
+  createPaintCan();
+  createGuessButton();
   makePegRowKeyboardActive(currentTurn);
 }
 
 function init() {
   currentTurn = boardRows;
-  modalForm()
-  $('#modal1').modal().modal('open');
-  // console.log("the master code is", masterCodeValues);
-  // printPlayerName();
+  modalForm();
+  $("#modal1")
+    .modal()
+    .modal("open");
 }
 
 init();

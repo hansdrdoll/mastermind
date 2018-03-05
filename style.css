@@ -40,33 +40,24 @@ font-family: 'Open Sans', sans-serif;
   font-family: 'Biryani', sans-serif;
   font-weight: 900;
   text-align: center;
-  /*display: inline-block;*/
-  /*position: absolute;*/
   grid-row: 1;
   grid-column: 2;
-  /*top: 1.5rem;*/
-  /*margin: 0 auto;*/
   color: #00000099;
 }
 
 .gameContainer {
   grid-column: 2;
   grid-row: 2;
-  /*align-self: top;*/
-  /*box-sizing: border-box;*/
-  /*margin-top: 8em;*/
   display:grid;
   max-width: 600px;
   min-width: 420px;
   grid-template-columns: 3fr 1fr 3fr;
-  /*grid-template-columns: 210px 50px 220px;*/
   grid-template-rows: repeat(10, 3em);
   grid-column-gap: .5em;
   grid-row-gap: .3em;
   grid-auto-flow: column;
   justify-content: center;
   padding: 30px;
-  /*margin-top: 2em;*/
 }
 
 .containerHard {
@@ -140,12 +131,14 @@ font-family: 'Open Sans', sans-serif;
 .reset-game-btn {
   position: absolute !important;
   bottom: 40%;
+  right: 0%;
+  animation: fade 1s;
 }
 
 .activePaintColor {
-  animation: pulse 1.5s infinite linear alternate;
-  /*transition: 1s;*/
+  animation: pulse 1.2s infinite linear alternate;
 }
+
 @keyframes pulse {
   0% {
   box-shadow:
@@ -194,10 +187,7 @@ div.fade {
   animation: fade 2s;
   opacity: 1;
 }
-@-webkit-keyframes fade {
-  from {opacity: 0}
-  to {opacity: 1}
-}
+
 @keyframes fade {
   from {opacity: 0}
   to {opacity: 1}
@@ -210,10 +200,6 @@ div.fade {
   display: inline-block;
 }
 
-.landing {
-  display:none;
-}
-
 .emptyPeg {
   box-shadow:inset 0px 1px 0px 0px #ffffff33;
   background-color:#ffffff33;
@@ -223,7 +209,6 @@ div.fade {
   height:40px;
   width:41px;
   text-align:center;
-  /*text-shadow:1px 1px 0px #ffffff;*/
 }
 
 .activePeg {
@@ -244,7 +229,6 @@ div.fade {
   height:40px;
   width:41px;
   text-align:center;
-  /*text-shadow:1px 1px 0px #ffffff;*/
 }
 .whitePeg:hover {
   background-color:#e9e9e9;
@@ -266,7 +250,6 @@ div.fade {
   width:41px;
   text-decoration:none;
   text-align:center;
-  /*text-shadow:1px 1px 0px #7d15cd;*/
 }
 .magentaPeg:hover {
   background-color:#9575cd;
@@ -288,7 +271,6 @@ div.fade {
   width:41px;
   text-decoration:none;
   text-align:center;
-  /*text-shadow:1px 1px 0px #cc9f52;*/
 }
 .orangePeg:hover {
   background-color:#ffd54f;
@@ -310,7 +292,6 @@ div.fade {
   width:41px;
   text-decoration:none;
   text-align:center;
-  /*text-shadow:1px 1px 0px #528ecc;*/
 }
 .bluePeg:hover {
   background-color:#4dd0e1;
@@ -332,7 +313,6 @@ div.fade {
   width:41px;
   text-decoration:none;
   text-align:center;
-  /*text-shadow:1px 1px 0px #810e05;*/
 }
 .redPeg:hover {
   background-color:#e57373;
@@ -354,7 +334,6 @@ div.fade {
   width:41px;
   text-decoration:none;
   text-align:center;
-  /*text-shadow:1px 1px 0px #86ae47;*/
 }
 .greenPeg:hover {
   background-color:#aed581;
@@ -419,9 +398,10 @@ input {
 input-field {
   margin: 20px !important;
 }
-.modial {
-  /*overflow-y: unset !important;*/
-}
+
+/*.modial {
+
+}*/
 
 @media only screen and (max-width: 550px) {
 .gameContainer {
