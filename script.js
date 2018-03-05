@@ -112,6 +112,7 @@ function showInstructions(stage) {
 
 function runCheckGuessButton() {
   let activePegs = document.querySelectorAll(".activePeg");
+  // i think there's a better way to do this
   if (activePegs.length != 0) {
     Materialize.toast(`Looks like you're missing a guess.`, 2000);
   } else {

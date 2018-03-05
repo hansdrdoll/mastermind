@@ -1,6 +1,8 @@
 # Mastermind
 # Project Overview
 
+##[Play Mastermind on hansdrdoll.github.io/mastermind](https://hansdrdoll.github.io/mastermind/)
+
 ## Project Schedule
 
 This schedule will be used to keep track of your progress throughout the week and align with our expectations.  
@@ -74,12 +76,12 @@ Include a full list of features that have been prioritized based on the `Time an
 ### Landing Page
 *What will a player see when they start your game?*
 
-A welcome screen that takes the player's name and displays the instructions
+A welcome screen that takes the player's name and difficulty level
 
 ### Game Initialization
 *What will a player see when the game is started?*
 
-An empty board waiting for their first guess
+An empty board waiting for their first guess, with an instruction prompt on the right side.
 
 ### Playing The Game
 *What will be the flow of the game, what will the user be expected to do and what will the user expect from the game?*
@@ -107,7 +109,7 @@ With a "try again" button.
 | Component 1 | H | 10hrs| 12hrs | 12hrs |
 
 ## Helper Functions
-Helper functions should be generic enough that they can be reused in other applications. Use this section to document all helper functions that fall into this category.
+*Helper functions should be generic enough that they can be reused in other applications. Use this section to document all helper functions that fall into this category.*
 
 | Function | Description | 
 | --- | :---: |  
@@ -115,6 +117,7 @@ Helper functions should be generic enough that they can be reused in other appli
 
 ## Additional Libraries
 *Use this section to list all supporting libraries and their role in the project.*
+I useded [Materialize](http://materializecss.com/) for most of the styling, which also uses relies jQuery.
 
 ## jQuery Discoveries
  *Use this section to list some, but not all, of the jQuery methods and\or functionality discovered while working on this project.*
