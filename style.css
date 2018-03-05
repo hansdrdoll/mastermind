@@ -69,6 +69,11 @@ font-family: 'Open Sans', sans-serif;
   /*margin-top: 2em;*/
 }
 
+.containerHard {
+  grid-template-columns: 4fr 1fr 3fr;
+  font-size: small;
+}
+
 .footer {
   grid-column: 2;
   grid-row: 3;
@@ -86,6 +91,9 @@ font-family: 'Open Sans', sans-serif;
   border-radius:0px;
   height:3em;
   text-align:center;
+}
+.rowHard {
+  grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr !important;
 }
 
 .row div {
@@ -110,11 +118,19 @@ font-family: 'Open Sans', sans-serif;
   justify-content: center;
 }
 
+.paintCanEasy {
+  grid-template-columns: 48px 48px;
+}
+
 .paintBrush {
   margin: .4em;
   color: #37474f88;
   padding-top: 7px;
   font-size: 16px;
+}
+
+.paintBrushEasy {
+  grid-row: 2;
 }
 
 .guessButton {
@@ -154,6 +170,10 @@ font-family: 'Open Sans', sans-serif;
   justify-content: center;
 }
 
+.feedbackRowHard {
+  width: 4em;
+}
+
 .masterCodeDiv {
   grid-row: 8/11;
   grid-column: 3;
@@ -162,20 +182,25 @@ font-family: 'Open Sans', sans-serif;
   align-items: center;
   justify-content: center;
   flex-flow: wrap;
-
-  /*padding: 5px;*/
 }
 
- div.fade {
-    animation: fade 2s;
-    opacity: 1;
- }
+.masterCodeDivHard {
+  grid-row: 7/11;
+  grid-column: 3;
+  grid-template-columns: 48px 48px 48px;
+}
+
+div.fade {
+  animation: fade 2s;
+  opacity: 1;
+}
 @-webkit-keyframes fade {
-    from {opacity: 0}
-    to {opacity: 1}
-}@keyframes fade {
-    from {opacity: 0}
-    to {opacity: 1}
+  from {opacity: 0}
+  to {opacity: 1}
+}
+@keyframes fade {
+  from {opacity: 0}
+  to {opacity: 1}
 }
 
 .masterCode {
@@ -369,7 +394,7 @@ font-family: 'Open Sans', sans-serif;
 }
 
 .playerInitials {
-  font-size: 24px;
+  font-size: 1.5em;
   grid-column: 3;
   grid-row: 1/2;
   align-self: start;
@@ -379,7 +404,7 @@ font-family: 'Open Sans', sans-serif;
 }
 
 .instructions {
-  font-size: 1em;
+  font-size: .9em;
   grid-column: 3;
   grid-row: 2/8;
   transition: 2s;

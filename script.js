@@ -19,7 +19,7 @@ let feedbackMatrix = [];
 
 // this can become user toggleable for difficulty level
 const boardRows = 9;
-const boardCells = 3;
+let boardCells;
 
 // this value equals the number of rows until deincremented by nextTurn
 let currentTurn = boardRows;
@@ -55,6 +55,10 @@ function createBoardAndPegBoardObj() {
     // create the html row
     let row = document.createElement("div");
     row.classList.add("row", "js-row" + x);
+    if (boardCells === 5){
+      row.classList.add("rowHard")
+      container.classList.add("containerHard")
+    }
     container.appendChild(row);
     // make an array for this row
     let rowArr = [];
@@ -74,11 +78,8 @@ function createBoardAndPegBoardObj() {
   }
 }
 
-
-
-
 function showInstructions(stage) {
-  let genericFeedbackInstructions = `<p><div class="feedbackPegFull" style="position:relative; top:2px; float: left;"></div>For each black peg, one of your guesses was the correct color and in the correct location.<br><div class="feedbackPegHalf" style="position:relative; top:3px; float: left;"></div>For each white peg, one of your guesses was the correct color but in the wrong location.</p>`;
+  let genericFeedbackInstructions = `<p><div class="feedbackPegFull" style="position:relative; top:2px; float: left;"></div>For each black peg, one of your guesses was the correct color and location.<br><div class="feedbackPegHalf" style="position:relative; top:3px; float: left;"></div>For each white peg, one of your guesses was the correct color but wrong location.</p>`;
   switch (stage) {
     case 0:
       let instructions = document.createElement("div");
@@ -88,8 +89,8 @@ function showInstructions(stage) {
         "blue-grey",
         "lighten-3"
       );
-      instructions.innerHTML = `<p>Welcome to the game! The mastermind has selected a secret code. Your have ${boardRows +
-        1} turns to guess it!</p><p style="text">Start by selecting a color and placing it in the highlighted row. You can also use your keyboard.</p>`;
+      instructions.innerHTML = `<p>Welcome! The mastermind has selected a secret code. Your can make ${boardRows +
+        1} guesses!</p><p>Start by selecting a color and placing it in the highlighted row. You can also use your keyboard.</p>`;
       container.appendChild(instructions);
       break;
     case 1:
@@ -145,6 +146,11 @@ function createPaintCan() {
     paintCan.appendChild(paintBrush);
   }
   container.appendChild(paintCan)
+  if (newColors.length === 4) {
+    paintCan.classList.add("paintCanEasy")
+    document.querySelector('.greenPeg').classList.add('paintBrushEasy')
+    document.querySelector('.orangePeg').classList.add('paintBrushEasy')
+  }
 }
 
 function createGuessButton() {
@@ -322,6 +328,9 @@ function appendMasterCodesDiv() {
     "darken-2",
     "fade"
   );
+  if (boardCells === 5) {
+    masterCodeDiv.classList.add("masterCodeDivHard")
+  }
   document.querySelector(".paintCan").style.display = "none";
   for (i = 0; i < masterCodeValues.length; i++) {
     let eachMasterCode = document.createElement("div");
@@ -343,6 +352,9 @@ function createFeedbackDiv() {
   for (i = 0; i <= boardRows; i++) {
     let feedbackRow = document.createElement("div");
     feedbackRow.classList.add("feedbackRow", i);
+    if (boardCells === 5) {
+      feedbackRow.classList.add("feedbackRowHard")
+    }
     for (x = 0; x <= boardCells; x++) {
       let feedbackPeg = document.createElement("div");
       feedbackPeg.classList.add("feedbackPeg");
@@ -362,7 +374,12 @@ function makeFeedbackArray(turn) {
 
 function checkScore() {
   let score = feedbackMatrix.reduce((a, b) => a + b);
-  if (score === 8) {
+  if (score === 8 && boardCells === 3) {
+    console.log("you win");
+    showInstructions(5);
+    appendResetGameButton();
+    appendMasterCodesDiv();
+  } else if (score === 12 && boardCells === 5) {
     console.log("you win");
     showInstructions(5);
     appendResetGameButton();
@@ -380,7 +397,11 @@ function checkScore() {
     printFeedback();
     showInstructions(3);
     nextTurn();
-  } else if (score > 4) {
+  } else if (score > 4 && boardCells === 3) {
+    printFeedback();
+    showInstructions(2);
+    nextTurn();
+  } else if (score > 7 && boardCells === 5) {
     printFeedback();
     showInstructions(2);
     nextTurn();
@@ -474,6 +495,9 @@ function nextTurn() {
 function setPlayerNameAndDifficulty (evt) {
   // console.log("im on")
     evt.preventDefault();
+    let difficulty = document.querySelector('input[name="difficulty"]:checked').id
+    console.log(difficulty)
+    setDifficultyLevel(difficulty)
     playerInitials = document.querySelector(".playerInitials").value.toUpperCase();
     printPlayerName();
     makePegRowKeyboardActive();
@@ -502,12 +526,46 @@ function applyActivePegStyle() {
   }
 }
 
-function youLost() {
-  showInstructions(3);
-}
-
-function youWin() {
-  showInstructions(4);
+function setDifficultyLevel (diff) {
+  switch (diff) {
+    case "easy":
+      boardCells = 3;
+      newColors.pop()
+      newColors.pop()
+      createBoardAndPegBoardObj();
+      createMasterCodes()
+      createFeedbackDiv();
+      assignPegRowEventListeners(currentTurn);
+      currentRow = document.querySelectorAll(`.row`)[currentTurn];
+      applyActivePegStyle();
+      showInstructions(0);
+      createPaintCan()
+      createGuessButton();
+      break;
+    case "normal":
+      boardCells = 3;
+      createBoardAndPegBoardObj();
+      createMasterCodes()
+      createFeedbackDiv();
+      assignPegRowEventListeners(currentTurn);
+      currentRow = document.querySelectorAll(`.row`)[currentTurn];
+      applyActivePegStyle();
+      showInstructions(0);
+      createPaintCan()
+      createGuessButton();
+      break;
+    case "hard":
+      boardCells = 5;
+      createBoardAndPegBoardObj();
+      createMasterCodes()
+      createFeedbackDiv();
+      assignPegRowEventListeners(currentTurn);
+      currentRow = document.querySelectorAll(`.row`)[currentTurn];
+      applyActivePegStyle();
+      showInstructions(0);
+      createPaintCan()
+      createGuessButton();
+  }
 }
 
 function resetGame () {
@@ -530,19 +588,8 @@ function resetGame () {
 
 function init() {
   currentTurn = boardRows;
-  createBoardAndPegBoardObj();
-  currentRow = document.querySelectorAll(`.row`)[currentTurn];
-  applyActivePegStyle();
-  createPaintCan();
-  createFeedbackDiv();
-  assignPegRowEventListeners(currentTurn);
-  createMasterCodes();
-  createGuessButton();
-  showInstructions(0);
-
   modalForm()
   $('#modal1').modal().modal('open');
-
   // console.log("the master code is", masterCodeValues);
   // printPlayerName();
 }
