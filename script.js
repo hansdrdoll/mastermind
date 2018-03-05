@@ -226,6 +226,7 @@ function assignKeyboardPainter(evt) {
       keyCounter++;
       break;
     case 87:
+      if (newColors.length > 4) {
       document
         .getElementById(pegBoard[currentTurn][keyCounter].id)
         .classList.add("whitePeg");
@@ -234,8 +235,10 @@ function assignKeyboardPainter(evt) {
         .getElementById(pegBoard[currentTurn][keyCounter].id)
         .classList.remove("activePeg", "emptyPeg");
       keyCounter++;
+      }
       break;
     case 82:
+    if (newColors.length > 4) {
       document
         .getElementById(pegBoard[currentTurn][keyCounter].id)
         .classList.add("redPeg");
@@ -244,6 +247,7 @@ function assignKeyboardPainter(evt) {
         .getElementById(pegBoard[currentTurn][keyCounter].id)
         .classList.remove("activePeg", "emptyPeg");
       keyCounter++;
+      }
       break;
     case 13:
       // if (game is not won)
