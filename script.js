@@ -66,6 +66,7 @@ function createBoardAndPegBoardObj() {
 
 function showInstructions(stage) {
   let genericFeedbackInstructions = `<p><div class="feedbackPegFull" style="position:relative; top:2px; float: left;"></div>For each black peg, one of your guesses was the correct color and location.<br><div class="feedbackPegHalf" style="position:relative; top:3px; float: left;"></div>For each white peg, one of your guesses was the correct color but wrong location.</p>`;
+  let instructions = document.createElement("div");
   switch (stage) {
     case 0:
       let instructions = document.createElement("div");
@@ -76,6 +77,7 @@ function showInstructions(stage) {
         "lighten-3"
       );
       instructions.innerHTML = `<h6>The mastermind has selected a secret code. You can make ${boardRows + 1} guesses!</h6><p>Start by selecting a color and placing it in the highlighted row.</p>`;
+      instructions.offsetWidth = instructions.offsetWidth
       container.appendChild(instructions);
       break;
     case 1:
@@ -244,7 +246,9 @@ function assignKeyboardPainter(evt) {
       keyCounter++;
       break;
     case 13:
+      // if (game is not won)
       runCheckGuessButton();
+      // else reset game
     default:
       return; // Quit when this doesn't handle the key event.
   }
@@ -252,10 +256,12 @@ function assignKeyboardPainter(evt) {
     setTimeout(function() {
       if (keyCounter > boardCells) {
         Materialize.toast(`Press return to submit your guess.`, 2000);
+      } else {
+        clearTimeout()
       }
     }, 4000);
   }
-  evt.preventDefault();
+  // evt.preventDefault();
 }
 
 function assignPegRowEventListeners(turn) {
@@ -363,16 +369,19 @@ function checkScore() {
     showInstructions(5);
     appendResetGameButton();
     appendMasterCodesDiv();
+    document.removeEventListener("keydown", assignKeyboardPainter)
   } else if (score === 12 && boardCells === 5) {
     console.log("you win");
     showInstructions(5);
     appendResetGameButton();
     appendMasterCodesDiv();
+    document.removeEventListener("keydown", assignKeyboardPainter)
   } else if (currentTurn < 1) {
     console.log("you lost");
     showInstructions(4);
     appendResetGameButton();
     appendMasterCodesDiv();
+    document.removeEventListener("keydown", assignKeyboardPainter)
   } else if (currentTurn < 2) {
     printFeedback();
     showInstructions(6);
@@ -410,10 +419,12 @@ function printFeedback() {
       case 0:
         break;
       case 1:
-        feedbackPeg.classList.remove("feedbackPeg");
+        feedbackPeg.offsetWidth = feedbackPeg.offsetWidth
         feedbackPeg.classList.add("feedbackPegHalf");
+        feedbackPeg.classList.remove("feedbackPeg");
         break;
       case 2:
+        feedbackPeg.offsetWidth = feedbackPeg.offsetWidth
         feedbackPeg.classList.remove("feedbackPeg");
         feedbackPeg.classList.add("feedbackPegFull");
     }
@@ -556,6 +567,7 @@ function init() {
   $("#modal1")
     .modal()
     .modal("open");
+  document.getElementById("input_text").focus();
 }
 
 init();

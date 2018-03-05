@@ -132,7 +132,7 @@ font-family: 'Open Sans', sans-serif;
   position: absolute !important;
   bottom: 40%;
   right: 0%;
-  animation: fade 1s;
+  animation: fade .5s;
 }
 
 .activePaintColor {
@@ -142,13 +142,11 @@ font-family: 'Open Sans', sans-serif;
 @keyframes pulse {
   0% {
   box-shadow:
-  inset 0 1px 3px #ffffff,
-  0 1px 3px #ffffff;
+inset 0 2px 6px #ffffff, 0 1px 3px #11111166
   }
   100% {
   box-shadow:
-  inset 0 1px 2px #ffffff55,
-  0 1px 1px #ffffff33;
+  inset 0 1px 3px #ffffffaa, 0 1px 4px #000000ff;
   }
 }
 
@@ -217,7 +215,7 @@ div.fade {
   background: linear-gradient(#ffffff44, #f0f0f022);
   /*background-color:#f9f9f94d;*/
   border:1px solid #ffffff55;
-  animation: pulse 1.5s infinite linear alternate
+  animation: pulse 1.2s infinite linear alternate
 }
 
 .whitePeg {
@@ -229,6 +227,7 @@ div.fade {
   height:40px;
   width:41px;
   text-align:center;
+  box-shadow: inset 0 1px 2px #ffffffaa, 0 1px 1px #00000033;
 }
 .whitePeg:hover {
   background-color:#e9e9e9;
@@ -250,6 +249,7 @@ div.fade {
   width:41px;
   text-decoration:none;
   text-align:center;
+  box-shadow: inset 0 1px 2px #ffffffaa, 0 1px 1px #00000033;
 }
 .magentaPeg:hover {
   background-color:#9575cd;
@@ -271,6 +271,7 @@ div.fade {
   width:41px;
   text-decoration:none;
   text-align:center;
+  box-shadow: inset 0 1px 2px #ffffffaa, 0 1px 1px #00000033;
 }
 .orangePeg:hover {
   background-color:#ffd54f;
@@ -292,6 +293,7 @@ div.fade {
   width:41px;
   text-decoration:none;
   text-align:center;
+  box-shadow: inset 0 1px 2px #ffffffaa, 0 1px 1px #00000033;
 }
 .bluePeg:hover {
   background-color:#4dd0e1;
@@ -313,6 +315,7 @@ div.fade {
   width:41px;
   text-decoration:none;
   text-align:center;
+  box-shadow: inset 0 1px 2px #ffffffaa, 0 1px 1px #00000033;
 }
 .redPeg:hover {
   background-color:#e57373;
@@ -334,6 +337,7 @@ div.fade {
   width:41px;
   text-decoration:none;
   text-align:center;
+  box-shadow: inset 0 1px 2px #ffffffaa, 0 1px 1px #00000033;
 }
 .greenPeg:hover {
   background-color:#aed581;
@@ -361,6 +365,8 @@ div.fade {
   height:1em;
   width:1em;
   margin: 2px;
+  animation: fade .3s;
+  box-shadow: inset 0 1px 1px #ffffff33, 0 1px 1px #00000044;
 }
 .feedbackPegFull {
   box-shadow:inset 0px 1px 1px 0px #ffffff66;
@@ -370,6 +376,8 @@ div.fade {
   height:1em;
   width:1em;
   margin: 2px;
+  animation: fade .3s;
+  box-shadow: inset 0 1px 1px #ffffff33, 0 1px 1px #00000044;
 }
 
 .playerInitials {
@@ -399,17 +407,54 @@ input-field {
   margin: 20px !important;
 }
 
-/*.modial {
-
-}*/
-
 @media only screen and (max-width: 550px) {
+
+body {
+  height: 100%;
+  background: #37474f;
+  background: radial-gradient(#607d8b, #37474f);
+  color: #000;
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr;
+  grid-template-rows: 80px 2fr 1fr;
+}
+
+/*.header {
+  font-family: 'Biryani', sans-serif;
+  font-weight: 900;
+  text-align: center;
+  grid-row: 1;
+  grid-column: 2;
+  color: #00000099;
+}
 .gameContainer {
-  /*box-sizing: border-box;*/
-  /*margin-top: 8em;*/
+
+  border: 2px solid red;
   display:grid;
   max-width: 600px;
   min-width: 300px;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 2fr;
 
 }
+.paintCan {
+  text-align: center;
+  grid-row: 8/10;
+  grid-column: 1/2;
+}
+
+.activePaintColor {
+  animation: pulse 1.2s infinite linear alternate;
+}
+
+.masterCodeDiv {
+  grid-row: 8/11;
+  grid-column: 1/2;
+}
+  .masterCodeDivHard {
+  grid-row: 7/11;
+  grid-column: 1/2;
+}
+.instructions {
+  font-size: .9em;
+  grid-column: 2;
+  grid-row: 2/8;*/
