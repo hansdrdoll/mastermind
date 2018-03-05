@@ -2,6 +2,8 @@
 
 ## [Play Mastermind on hansdrdoll.github.io/mastermind](https://hansdrdoll.github.io/mastermind/)
 
+## [In-class presentation](https://docs.google.com/presentation/d/14jqmI-gk276bkDoUuV2YjLRFN3weXzX3Txe9KEwi_OU/edit?usp=sharing)
+
 # Project Overview
 
 ## Project Schedule
