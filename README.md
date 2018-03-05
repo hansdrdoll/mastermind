@@ -1,7 +1,8 @@
 # Mastermind
-# Project Overview
 
-##[Play Mastermind on hansdrdoll.github.io/mastermind](https://hansdrdoll.github.io/mastermind/)
+## [Play Mastermind on hansdrdoll.github.io/mastermind](https://hansdrdoll.github.io/mastermind/)
+
+# Project Overview
 
 ## Project Schedule
 
@@ -117,7 +118,8 @@ With a "try again" button.
 
 ## Additional Libraries
 *Use this section to list all supporting libraries and their role in the project.*
-I useded [Materialize](http://materializecss.com/) for most of the styling, which also uses relies jQuery.
+
+I used [Materialize](http://materializecss.com/) for most of the styling, which also uses relies jQuery.
 
 ## jQuery Discoveries
  *Use this section to list some, but not all, of the jQuery methods and\or functionality discovered while working on this project.*
