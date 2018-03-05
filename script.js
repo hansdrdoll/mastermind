@@ -369,18 +369,21 @@ function makeFeedbackArray(turn) {
 function checkScore() {
   let score = feedbackMatrix.reduce((a, b) => a + b);
   if (score === 8 && boardCells === 3) {
+    printFeedback();
     console.log("you win");
     showInstructions(5);
     appendResetGameButton();
     appendMasterCodesDiv();
     document.removeEventListener("keydown", assignKeyboardPainter)
   } else if (score === 12 && boardCells === 5) {
+    printFeedback();
     console.log("you win");
     showInstructions(5);
     appendResetGameButton();
     appendMasterCodesDiv();
     document.removeEventListener("keydown", assignKeyboardPainter)
   } else if (currentTurn < 1) {
+    printFeedback();
     console.log("you lost");
     showInstructions(4);
     appendResetGameButton();

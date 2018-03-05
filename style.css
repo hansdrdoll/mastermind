@@ -78,8 +78,6 @@ font-family: 'Open Sans', sans-serif;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: repeat(10, 3em);
   grid-auto-flow: row;
-  box-shadow:inset 0px 0px 0px 0px #ffffff;
-  border-radius:0px;
   height:3em;
   text-align:center;
 }
