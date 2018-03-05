@@ -530,6 +530,7 @@ function setDifficultyLevel(diff) {
 function resetGame() {
   masterCodeValues = [];
   feedbackMatrix = [];
+  pegBoard = [];
   container.innerHTML = "";
   currentTurn = boardRows;
   buildABoard();
